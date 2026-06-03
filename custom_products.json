@@ -1,0 +1,122 @@
+[
+  {
+    "key": "custom_1780011126365",
+    "name": "Especiero de Pared",
+    "desc": "Sencillo estante para especias para una mejor organización de la cocina. Cada sección alberga dos frascos de especias y se puede montar en la pared con 2 tornillos para paneles de yeso #4. (98*125*50)",
+    "price": 2495,
+    "collectionId": "cocina-hogar",
+    "collectionName": "Cocina & Hogar",
+    "categoryBadge": "Tecnología PETG",
+    "photo": "images/uploads/custom_image_custom_1780011126365.jpg",
+    "slicerPhoto": "images/uploads/custom_image_custom_1780011126365.jpg",
+    "telemetry": {
+      "weight": 56,
+      "hours": 2,
+      "minutes": 36,
+      "material": "PETG",
+      "color": "S/C",
+      "friendlyColor": "S/C",
+      "margin": 1.6,
+      "filamentCost": 999.6,
+      "energyCost": 40.040000000000006,
+      "amortCost": 520,
+      "netCost": 1559.64
+    }
+  },
+  {
+    "key": "custom_1780057581968",
+    "name": "Embudo N°1",
+    "desc": "Presentamos el embudo impreso en 3D con canales de velocidad, una herramienta revolucionaria diseñada para mejorar la eficiencia de vertido. Este innovador embudo cuenta con canales de velocidad especialmente diseñados en la base, lo que garantiza un flujo de aire óptimo y un vertido más suave y rápido. Es perfecto para una variedad de usos, desde fluidos automotrices hasta ingredientes de cocina.\n156*132*160\n",
+    "price": 3400,
+    "collectionId": "tocador-baño",
+    "collectionName": "",
+    "categoryBadge": "Tecnología PETG",
+    "photo": "images/uploads/custom_image_custom_1780057581968.jpg",
+    "slicerPhoto": "images/uploads/custom_image_custom_1780057581968.jpg",
+    "telemetry": {
+      "weight": 82,
+      "hours": 2,
+      "minutes": 22,
+      "material": "PETG",
+      "color": "S/C",
+      "friendlyColor": "S/C",
+      "margin": 1.65,
+      "filamentCost": 1549.8,
+      "energyCost": 36.44666666666667,
+      "amortCost": 473.3333333333333,
+      "netCost": 2059.58
+    }
+  },
+  {
+    "key": "custom_1780058301711",
+    "name": "Embudo N° 2",
+    "desc": "Presentamos el embudo impreso en 3D con canales de velocidad, una herramienta revolucionaria diseñada para mejorar la eficiencia de vertido. Este innovador embudo cuenta con canales de velocidad especialmente diseñados en la base, lo que garantiza un flujo de aire óptimo y un vertido más suave y rápido. Es perfecto para una variedad de usos, desde fluidos automotrices hasta ingredientes de cocina.\n117*100*120",
+    "price": 1565,
+    "collectionId": "tocador-baño",
+    "collectionName": "",
+    "categoryBadge": "Tecnología PETG",
+    "photo": "images/uploads/custom_image_custom_1780058301711.jpg",
+    "slicerPhoto": "images/uploads/custom_image_custom_1780058301711.jpg",
+    "telemetry": {
+      "weight": 33,
+      "hours": 1,
+      "minutes": 30,
+      "material": "PETG",
+      "color": "S/C",
+      "friendlyColor": "S/C",
+      "margin": 1.65,
+      "filamentCost": 623.7,
+      "energyCost": 23.1,
+      "amortCost": 300,
+      "netCost": 946.8000000000001
+    }
+  },
+  {
+    "key": "custom_1780246529385",
+    "name": "Juego de Soporte para Cepillo de Dientes",
+    "desc": " Un porta vasos con 3 vasos, para tres cepillos de dientes.",
+    "price": 5930,
+    "collectionId": "tocador-baño",
+    "collectionName": "Tocador & Baño",
+    "categoryBadge": "Tecnología PETG",
+    "photo": "images/uploads/custom_image_custom_1780246529385.jpg",
+    "slicerPhoto": "images/uploads/custom_image_custom_1780246529385.jpg",
+    "telemetry": {
+      "weight": 157,
+      "hours": 2,
+      "minutes": 54,
+      "material": "PETG",
+      "color": "S/C",
+      "friendlyColor": "S/C",
+      "margin": 1.65,
+      "filamentCost": 2967.3,
+      "energyCost": 44.660000000000004,
+      "amortCost": 580,
+      "netCost": 3591.96
+    }
+  },
+  {
+    "key": "custom_1780357821438",
+    "name": "Organizador de mesita de noche",
+    "desc": "Organizador de mesita de noche  200*177*122 ",
+    "price": 9015,
+    "collectionId": "oficina-escritorio",
+    "collectionName": "Oficina & Escritorio",
+    "categoryBadge": "Tecnología PETG",
+    "photo": "images/uploads/custom_image_custom_1780357821438.jpg",
+    "slicerPhoto": "images/uploads/custom_image_custom_1780357821438.jpg",
+    "telemetry": {
+      "weight": 224,
+      "hours": 6,
+      "minutes": 30,
+      "material": "PETG",
+      "color": "blanco",
+      "friendlyColor": "blanco",
+      "margin": 1.6,
+      "filamentCost": 4233.6,
+      "energyCost": 100.10000000000002,
+      "amortCost": 1300,
+      "netCost": 5633.700000000001
+    }
+  }
+]

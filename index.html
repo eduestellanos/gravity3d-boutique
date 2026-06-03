@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GRAVITY 3D | Catálogo Premium & Objetos Inteligentes</title>
+    <meta name="description" content="Catálogo exclusivo de GRAVITY 3D. Objetos de diseño funcional en dos piezas, drenaje de alta eficiencia y soporte para smartphone en PETG técnico.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="#inicio" class="logo">
+                <span class="logo-icon"><i class="fa-solid fa-cube animate-float"></i></span>
+                <span class="logo-text">GRAVITY<span class="highlight">3D</span></span>
+            </a>
+            <nav class="nav-menu">
+                <a href="#tocador-baño" class="nav-link">Tocador & Baño</a>
+                <a href="#oficina-escritorio" class="nav-link">Oficina & Escritorio</a>
+                <a href="#mascotas-recreacion" class="nav-link">Mascotas & Recreación</a>
+                <a href="#pilares" class="nav-link">Calidad</a>
+                
+                <!-- Ambient Glow Selector -->
+                <div class="theme-switcher">
+                    <button class="theme-btn active" data-theme="fuego" style="background: linear-gradient(135deg, #F56565, #ED8936);" title="Tema Fuego (Coral)"></button>
+                    <button class="theme-btn" data-theme="cyan" style="background: linear-gradient(135deg, #00F2FE, #4FACFE);" title="Tema Neón (Cian)"></button>
+                    <button class="theme-btn" data-theme="galaxy" style="background: linear-gradient(135deg, #A855F7, #EC4899);" title="Tema Galaxia (Violeta)"></button>
+                </div>
+
+                <a href="#pedido" class="btn btn-secondary nav-btn">Ver Pedido</a>
+            </nav>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section General -->
+    <section class="hero" id="inicio">
+        <div class="hero-bg-glow"></div>
+        <div class="container hero-container">
+            <div class="hero-content">
+                <span class="badge"><i class="fa-solid fa-star"></i> Colección Tocador & Baño</span>
+                <h1 class="hero-title">Redefinimos tus espacios diarios. <span class="gradient-text">Diseño inteligente y estética premium.</span></h1>
+                <p class="hero-description">
+                    Te damos la bienvenida a <strong>GRAVITY 3D Studio</strong>. Desarrollamos objetos cotidianos bajo estrictos estándares funcionales, combinando encastres perfectos de múltiples piezas y terminaciones de tacto suave.
+                </p>
+                <div class="hero-cta-group">
+                    <a href="#catalogo" class="btn btn-primary btn-lg">Explorar Catálogo</a>
+                    <a href="#pilares" class="btn btn-outline btn-lg">Compromiso de Calidad</a>
+                </div>
+                <div class="hero-trust">
+                    <div class="trust-item"><i class="fa-solid fa-shield-halved"></i> PETG Técnico</div>
+                    <div class="trust-item"><i class="fa-solid fa-truck-fast"></i> Envíos a todo el país</div>
+                    <div class="trust-item"><i class="fa-solid fa-rotate-left"></i> 100% Garantía</div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-grid-showcase animate-float-slow">
+                    <img src="images/hero_showcase.png" alt="Colección Premium Gravity 3D" class="hero-img-single">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Value Prop / Pillars Section -->
+    <section class="value-prop" id="pilares">
+        <div class="container">
+            <div class="section-header">
+                <span class="subtitle">Nuestra Filosofía</span>
+                <h2>¿Por qué elegir Gravity 3D?</h2>
+                <p class="section-desc">Combinamos mecánica de materiales con diseño estético para crear soluciones que duran toda la vida.</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="card-icon"><i class="fa-solid fa-shield"></i></div>
+                    <h3>PETG de Grado Técnico</h3>
+                    <p>Fabricado en PETG Premium de alta resistencia. A diferencia del PLA común, soporta humedad extrema, impactos cotidianos y no se deforma con el tiempo.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="card-icon"><i class="fa-solid fa-cubes"></i></div>
+                    <h3>Diseño de Múltiples Piezas</h3>
+                    <p>Desarrollamos encastres milimétricos y sistemas modulares desmontables que facilitan la limpieza y multiplican la funcionalidad.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="card-icon"><i class="fa-solid fa-fill-drip"></i></div>
+                    <h3>Acabado Ultra Premium</h3>
+                    <p>Optimizado digitalmente para lograr una textura mate ultra suave y sobria, libre de imperfecciones visuales y agradable al tacto.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Filament Guide Section -->
+    <section class="filament-guide" id="guia-materiales" style="padding: 80px 0; background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.015), rgba(0,0,0,0)); border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border);">
+        <div class="container">
+            <div class="section-header" style="margin-bottom: 48px;">
+                <span class="subtitle">Ingeniería de Materiales</span>
+                <h2>Guía Interactiva de Insumos 3D</h2>
+                <p class="section-desc">Conocé los polímeros técnicos que utilizamos en Gravity 3D. Hacé clic en las pestañas para comparar sus coeficientes de resistencia y comportamiento físico.</p>
+            </div>
+            
+            <div class="filament-guide-card glassmorphism" style="padding: 48px; display: grid; grid-template-columns: 1fr 1.2fr; gap: 48px; align-items: center; border-color: rgba(255,255,255,0.08);">
+                <!-- Left Column: Controls & Text Description -->
+                <div class="material-info-col">
+                    <div class="material-tabs" style="display: flex; gap: 8px; margin-bottom: 28px; background: rgba(255,255,255,0.02); padding: 6px; border-radius: 50px; border: 1px solid var(--glass-border);">
+                        <button class="material-tab-btn active" data-material="petg" style="flex: 1; padding: 12px; border-radius: 50px; border: none; background: transparent; color: var(--text-muted); font-family: var(--font-heading); font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: var(--transition);">PETG Técnico</button>
+                        <button class="material-tab-btn" data-material="pla" style="flex: 1; padding: 12px; border-radius: 50px; border: none; background: transparent; color: var(--text-muted); font-family: var(--font-heading); font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: var(--transition);">PLA Decorativo</button>
+                        <button class="material-tab-btn" data-material="abs" style="flex: 1; padding: 12px; border-radius: 50px; border: none; background: transparent; color: var(--text-muted); font-family: var(--font-heading); font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: var(--transition);">ABS Industrial</button>
+                    </div>
+                    <div class="material-content">
+                        <h3 id="matTitle" style="font-size: 1.8rem; margin-bottom: 16px; color: white;">PETG de Grado Técnico</h3>
+                        <p id="matDesc" style="color: var(--text-muted); font-size: 0.98rem; line-height: 1.7; margin-bottom: 24px; min-height: 130px;">Es el material premium estrella de nuestro taller. Combina la facilidad de extrusión del PLA con la altísima durabilidad y resistencia al impacto mecánica del ABS. Es químicamente inerte, apto para contacto alimentario y resistente al agua y humedad extrema, haciéndolo perfecto para accesorios de baño, organizadores y piezas de uso diario.</p>
+                        <div class="material-badges" style="display: flex; gap: 12px; flex-wrap: wrap;">
+                            <span class="badge-status in-stock" id="matBadge1" style="margin-bottom: 0;"><i class="fa-solid fa-water-slash"></i> Impermeable</span>
+                            <span class="badge-status in-stock" id="matBadge2" style="margin-bottom: 0;"><i class="fa-solid fa-dumbbell"></i> Alta Tenacidad</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Visual Progress Bars -->
+                <div class="material-metrics-col" style="display: flex; flex-direction: column; gap: 28px;">
+                    <!-- Metric 1: Structural Toughness -->
+                    <div class="metric-block">
+                        <div class="metric-header" style="display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: 600; font-size: 0.9rem;">
+                            <span>Resistencia Estructural (Tenacidad)</span>
+                            <span id="valToughness" style="color: var(--primary);">85%</span>
+                        </div>
+                        <div class="progress-bar-bg" style="height: 12px; background: rgba(255,255,255,0.04); border-radius: 50px; overflow: hidden; border: 1px solid var(--glass-border);">
+                            <div class="progress-bar-fill" id="fillToughness" style="height: 100%; width: 85%; background: var(--primary-gradient); transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 0 10px var(--primary-glow);"></div>
+                        </div>
+                    </div>
+
+                    <!-- Metric 2: Flexibility -->
+                    <div class="metric-block">
+                        <div class="metric-header" style="display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: 600; font-size: 0.9rem;">
+                            <span>Flexibilidad / Coeficiente Elástico</span>
+                            <span id="valFlexibility" style="color: var(--primary);">40%</span>
+                        </div>
+                        <div class="progress-bar-bg" style="height: 12px; background: rgba(255,255,255,0.04); border-radius: 50px; overflow: hidden; border: 1px solid var(--glass-border);">
+                            <div class="progress-bar-fill" id="fillFlexibility" style="height: 100%; width: 40%; background: var(--primary-gradient); transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 0 10px var(--primary-glow);"></div>
+                        </div>
+                    </div>
+
+                    <!-- Metric 3: Thermal Resistance -->
+                    <div class="metric-block">
+                        <div class="metric-header" style="display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: 600; font-size: 0.9rem;">
+                            <span>Resistencia Térmica Máxima (Glass Transition)</span>
+                            <span id="valThermal" style="color: var(--primary);">80°C (80%)</span>
+                        </div>
+                        <div class="progress-bar-bg" style="height: 12px; background: rgba(255,255,255,0.04); border-radius: 50px; overflow: hidden; border: 1px solid var(--glass-border);">
+                            <div class="progress-bar-fill" id="fillThermal" style="height: 100%; width: 80%; background: var(--primary-gradient); transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 0 10px var(--primary-glow);"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Catalog Section (Double Product Customization) -->
+    <section class="customization" id="catalogo">
+        <div class="container">
+            <div class="section-header">
+                <span class="subtitle">Boutique Gravity 3D</span>
+                <h2>Armá tu pedido personalizado</h2>
+                <p class="section-desc">Seleccioná los colores y unidades de los productos que desees incorporar a tu tocador. El total se calculará al instante.</p>
+            </div>
+
+            <div class="custom-grid">
+                <!-- Left side: Products catalog list -->
+                <div class="products-list-wrapper">
+                    
+                    <!-- ADMIN CREATOR PANEL (Visible only when isAdmin is true) -->
+                    <div id="adminCreatorPanel" class="glassmorphism highlighted-card" style="display: none; padding: 32px; margin-bottom: 40px; border-color: rgba(245, 101, 101, 0.25);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
+                            <h3 style="font-size: 1.6rem; color: white; display: flex; align-items: center; gap: 12px; margin: 0; font-family: var(--font-heading);">
+                                <i class="fa-solid fa-square-plus" style="color: var(--primary);"></i> Creador de Productos & Telemetría
+                            </h3>
+                            <span class="badge" style="margin-bottom: 0; background: var(--primary-glow-15);"><i class="fa-solid fa-user-gear"></i> Modo Administrador</span>
+                        </div>
+                        
+                        <form id="productCreatorForm" onsubmit="return false;" style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                            <!-- Left Column: Basic Info -->
+                            <div style="display: flex; flex-direction: column; gap: 18px;">
+                                <div class="form-group">
+                                    <label class="control-label-micro" style="margin-bottom: 8px; display: block;">Nombre del Producto:</label>
+                                    <input type="text" id="newProdName" required placeholder="Ej: Jabonera de Panal, Soporte Ergonómico" style="width: 100%; padding: 12px 16px; border-radius: 12px; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); color: white; font-family: var(--font-body); font-size: 0.95rem; outline: none; transition: var(--transition);">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="control-label-micro" style="margin-bottom: 8px; display: block;">Colección Destino:</label>
+                                    <select id="newProdCollection" required style="width: 100%; padding: 12px 16px; border-radius: 12px; background: #0B0F19; border: 1px solid var(--glass-border); color: white; font-family: var(--font-body); font-size: 0.95rem; outline: none; transition: var(--transition); cursor: pointer;">
+                                        <option value="tocador-baño">Tocador & Baño</option>
+                                        <option value="oficina-escritorio">Oficina & Escritorio</option>
+                                        <option value="mascotas-recreacion">Mascotas & Recreación</option>
+                                        <option value="nueva-coleccion">[ + Nueva Colección... ]</option>
+                                    </select>
+                                    
+                                    <!-- Input dinámico para agregar nueva colección -->
+                                    <div id="newCollectionNameGroup" style="display: none; margin-top: 12px;">
+                                        <label class="control-label-micro" style="margin-bottom: 8px; display: block; color: var(--primary);">Nombre de la Nueva Colección:</label>
+                                        <input type="text" id="newCollectionName" placeholder="Ej: Cocina & Hogar, Taller Técnico" style="width: 100%; padding: 12px 16px; border-radius: 12px; background: rgba(0,0,0,0.25); border: 1px solid var(--glass-border); color: white; font-family: var(--font-body); font-size: 0.95rem; outline: none; transition: var(--transition);">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="control-label-micro" style="margin-bottom: 8px; display: block;">Descripción Comercial:</label>
+                                    <textarea id="newProdDesc" required placeholder="Describí las funciones mecánicas, medidas, encastres y ventajas de uso..." style="width: 100%; height: 100px; padding: 12px 16px; border-radius: 12px; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); color: white; font-family: var(--font-body); font-size: 0.9rem; resize: none; outline: none; transition: var(--transition); line-height: 1.5;"></textarea>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="control-label-micro" style="margin-bottom: 8px; display: block;">Nombre de Foto en carpeta images/ (Opcional):</label>
+                                    <input type="text" id="newProdPhotoName" placeholder="Ej: juguete_gato.jpg (Vacío usa default)" style="width: 100%; padding: 12px 16px; border-radius: 12px; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); color: white; font-family: var(--font-body); font-size: 0.95rem; outline: none; transition: var(--transition); margin-bottom: 12px;">
+                                    
+                                    <!-- Interactive Paste/Upload Zone -->
+                                    <div id="imageUploadArea" class="glassmorphism" style="border: 2px dashed rgba(255,255,255,0.15); border-radius: 12px; padding: 16px; text-align: center; cursor: pointer; transition: var(--transition); background: rgba(0,0,0,0.15);">
+                                        <i class="fa-solid fa-camera" style="font-size: 1.5rem; color: var(--primary); margin-bottom: 8px; display: block;"></i>
+                                        <span style="font-size: 0.8rem; color: white; font-weight: 600; display: block; margin-bottom: 4px;">Pegar Captura (Ctrl+V) o Subir Archivo</span>
+                                        <span style="font-size: 0.7rem; color: var(--text-muted); display: block;">Se auto-comprime a < 15KB para evitar bloqueos</span>
+                                        <input type="file" id="newProdFileSelector" accept="image/*" style="display: none;">
+                                        
+                                        <!-- Mini-preview inside the box -->
+                                        <div id="uploadPreviewContainer" style="display: none; margin-top: 10px; align-items: center; justify-content: center; gap: 10px;">
+                                            <img id="uploadPreviewImg" src="" style="max-width: 60px; max-height: 60px; border-radius: 6px; border: 1px solid var(--glass-border); object-fit: cover;">
+                                            <span style="font-size: 0.75rem; color: #48BB78; font-weight: bold;"><i class="fa-solid fa-circle-check"></i> Captura Lista</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Right Column: Slicer Telemetry & Live Calculator -->
+                            <div style="display: flex; flex-direction: column; gap: 18px; background: rgba(0,0,0,0.25); padding: 24px; border-radius: 18px; border: 1px solid var(--glass-border);">
+                                <h4 style="font-size: 1.1rem; color: white; display: flex; align-items: center; gap: 8px; margin: 0 0 4px 0; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 10px; font-family: var(--font-heading);">
+                                    <i class="fa-solid fa-calculator" style="color: var(--primary);"></i> Telemetría de Impresión 3D
+                                </h4>
+                                
+                                <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 16px;">
+                                    <div class="form-group">
+                                        <label class="control-label-micro" style="margin-bottom: 8px; display: block;">Consumo Filamento (g):</label>
+                                        <input type="number" id="newProdWeight" required step="0.01" min="0.1" placeholder="Ej: 38.83" style="width: 100%; padding: 10px 14px; border-radius: 10px; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); color: white; font-family: var(--font-body); font-size: 0.9rem; outline: none; transition: var(--transition);">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="control-label-micro" style="margin-bottom: 8px; display: block;">Material:</label>
+                                        <select id="newProdMaterial" required style="width: 100%; padding: 10px 14px; border-radius: 10px; background: #0B0F19; border: 1px solid var(--glass-border); color: white; font-family: var(--font-body); font-size: 0.9rem; outline: none; transition: var(--transition); cursor: pointer;">
+                                            <option value="PETG">PETG</option>
+                                            <option value="PLA">PLA</option>
+                                            <option value="ABS">ABS</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                                    <div class="form-group">
+                                        <label class="control-label-micro" style="margin-bottom: 8px; display: block; color: var(--primary);">Precio por Gramo (ARS):</label>
+                                        <input type="number" id="materialPriceInput" required step="0.1" min="0.1" style="width: 100%; padding: 10px 14px; border-radius: 10px; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); color: white; font-family: var(--font-body); font-size: 0.9rem; outline: none; transition: var(--transition);">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label-micro" style="margin-bottom: 8px; display: block;">Color del Filamento (Base):</label>
+                                        <input type="text" id="newProdColor" placeholder="Ej: Rojo, Verde Oliva, Azul" required style="width: 100%; padding: 10px 14px; border-radius: 10px; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); color: white; font-family: var(--font-body); font-size: 0.9rem; outline: none; transition: var(--transition);">
+                                    </div>
+                                </div>
+                                
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                                    <div class="form-group">
+                                        <label class="control-label-micro" style="margin-bottom: 8px; display: block;">Horas de Impresión:</label>
+                                        <input type="number" id="newProdHours" required min="0" placeholder="Ej: 2" style="width: 100%; padding: 10px 14px; border-radius: 10px; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); color: white; font-family: var(--font-body); font-size: 0.9rem; outline: none; transition: var(--transition);">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="control-label-micro" style="margin-bottom: 8px; display: block;">Minutos de Impresión:</label>
+                                        <input type="number" id="newProdMinutes" required min="0" max="59" placeholder="Ej: 2" style="width: 100%; padding: 10px 14px; border-radius: 10px; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); color: white; font-family: var(--font-body); font-size: 0.9rem; outline: none; transition: var(--transition);">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="control-label-micro" style="margin-bottom: 8px; display: block;">Margen Comercial (Precio de Venta):</label>
+                                    <select id="newProdMargin" required style="width: 100%; padding: 10px 14px; border-radius: 10px; background: #0B0F19; border: 1px solid var(--glass-border); color: white; font-family: var(--font-body); font-size: 0.9rem; outline: none; transition: var(--transition); cursor: pointer;">
+                                        <option value="1.60">Margen Conservador (1.60x)</option>
+                                        <option value="1.65" selected>Margen Premium Estándar (1.65x)</option>
+                                        <option value="2.00">Margen de Lujo Absoluto (2.00x)</option>
+                                    </select>
+                                </div>
+                                
+                                <!-- Live Calculation Summary Dashboard -->
+                                <div style="background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 8px; font-size: 0.8rem; color: var(--text-muted);">
+                                    <div style="display: flex; justify-content: space-between;">
+                                        <span>Costo Materia Prima (con purga):</span>
+                                        <strong style="color: white;" id="calcFilamentCost">$0 ARS</strong>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between;">
+                                        <span>Consumo Eléctrico Impresora:</span>
+                                        <strong style="color: white;" id="calcEnergyCost">$0 ARS</strong>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between;">
+                                        <span>Amortización de Máquina:</span>
+                                        <strong style="color: white;" id="calcAmortCost">$0 ARS</strong>
+                                    </div>
+                                    <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.06); margin: 6px 0;">
+                                    <div style="display: flex; justify-content: space-between; font-size: 0.9rem; font-weight: 600; color: white;">
+                                        <span>COSTO DE FABRICACIÓN NETO:</span>
+                                        <strong style="color: var(--primary);" id="calcNetCost">$0 ARS</strong>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; font-size: 1.05rem; font-weight: 800; color: #48BB78; border-top: 1px dashed rgba(72,187,120,0.2); padding-top: 8px; margin-top: 4px;">
+                                        <span>PRECIO DE VENTA SUGERIDO:</span>
+                                        <strong id="calcPriceSuggested">$0 ARS</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Submit Button spanning full width -->
+                            <div style="grid-column: span 2; display: flex; gap: 16px; margin-top: 8px; flex-wrap: wrap;">
+                                <button type="submit" id="btnPublishProduct" class="btn btn-primary" style="flex: 1.5; border-radius: 12px; font-size: 0.95rem; padding: 14px; min-width: 180px;">
+                                    <i class="fa-solid fa-circle-check" style="margin-right: 8px;"></i> Publicar y Finalizar
+                                </button>
+                                <button type="button" id="btnPublishAndKeep" class="btn btn-outline" style="flex: 1.5; border-radius: 12px; font-size: 0.95rem; padding: 14px; min-width: 180px; border-color: var(--primary); color: white; background: var(--primary-glow-05);">
+                                    <i class="fa-solid fa-square-plus" style="margin-right: 8px; color: var(--primary);"></i> Guardar y Seguir Cargando
+                                </button>
+                                <button type="button" id="btnSyncJsonExport" class="btn btn-outline" style="flex: 1; border-radius: 12px; font-size: 0.9rem; padding: 14px; border-color: rgba(255,255,255,0.15); min-width: 150px;">
+                                    <i class="fa-solid fa-file-export" style="margin-right: 8px;"></i> Sincronizar Stock JSON
+                                </button>
+                            </div>
+                        </form>
+                        
+                        <!-- Catálogo de Carga checklist (Visible dynamically inside adminCreatorPanel) -->
+                        <div id="adminCatalogChecklist" style="margin-top: 32px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 24px;">
+                            <h4 style="font-size: 1.15rem; color: white; display: flex; align-items: center; justify-content: space-between; margin: 0 0 16px 0; font-family: var(--font-heading); flex-wrap: wrap; gap: 12px;">
+                                <span style="display: flex; align-items: center; gap: 8px;">
+                                    <i class="fa-solid fa-list-check" style="color: var(--primary);"></i> Panel de Control de Carga (Catálogo General de Góndola)
+                                </span>
+                                <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                                    <button type="button" id="btnExportCatalogExcel" class="btn btn-outline" style="border-radius: 10px; font-size: 0.75rem; padding: 6px 14px; border-color: #48BB78; color: #48BB78; background: rgba(72,187,120,0.06); cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 6px; font-weight: 600;">
+                                        <i class="fa-solid fa-file-excel"></i> Exportar Catálogo (Excel)
+                                    </button>
+                                    <button type="button" id="btnExportCatalogPDF" class="btn btn-outline" style="border-radius: 10px; font-size: 0.75rem; padding: 6px 14px; border-color: #3182CE; color: #3182CE; background: rgba(49,130,206,0.06); cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 6px; font-weight: 600;">
+                                        <i class="fa-solid fa-file-pdf"></i> Exportar Catálogo (PDF)
+                                    </button>
+                                    <span class="badge" id="adminCatalogCount" style="background: var(--primary-glow-15); color: var(--primary); font-size: 0.75rem; padding: 6px 12px; margin-bottom: 0;">0 Productos</span>
+                                </div>
+                            </h4>
+                            
+                            <!-- Catalogue Checklist Grid/Table -->
+                            <div class="glassmorphism" style="background: rgba(0,0,0,0.3); border-radius: 14px; border: 1px solid var(--glass-border); padding: 16px; max-height: 350px; overflow-y: auto;">
+                                <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem; color: var(--text-muted);">
+                                    <thead>
+                                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.06); color: white;">
+                                            <th style="padding: 10px 8px; font-weight: 600;">Visual</th>
+                                            <th style="padding: 10px 8px; font-weight: 600;">Nombre del Producto</th>
+                                            <th style="padding: 10px 8px; font-weight: 600;">Colección</th>
+                                            <th style="padding: 10px 8px; font-weight: 600;">Material</th>
+                                            <th style="padding: 10px 8px; font-weight: 600; text-align: right;">Precio de Venta</th>
+                                            <th style="padding: 10px 8px; font-weight: 600; text-align: center;">Comercializar</th>
+                                            <th style="padding: 10px 8px; font-weight: 600; text-align: center;">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="adminCatalogChecklistBody">
+                                        <!-- Dynamic checklist rows will be injected here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- COLLECTION 1: TOCADOR & BAÑO -->
+                    <div class="collection-header-inline" id="tocador-baño">
+                        <h3><i class="fa-solid fa-bath"></i> Colección Tocador & Baño</h3>
+                    </div>
+ 
+                    <div class="products-grid-cols" id="grid-tocador-baño">
+                        <!-- Product 1: Jabonera de Panal -->
+                        <div class="product-selection-card glassmorphism">
+                        <span class="product-category-badge">Bicolor Premium</span>
+                        <div class="product-card-header">
+                            <div class="product-main-visual">
+                                <img src="images/jabonera.png" alt="Jabonera de Panal Minimalista" class="catalog-thumb" id="imgJabonera">
+                            </div>
+                            <div class="product-main-details">
+                                <h3>Jabonera de Panal Minimalista</h3>
+                                <p class="product-card-desc" id="descJabonera">Sistema de dos piezas encastrables con drenaje en panal de abejas. Evita que el jabón se ablande y decora tu tocador.</p>
+                                <span class="card-price-tag" id="priceJabonera">$4.550 ARS</span>
+                                <i class="fa-solid fa-rotate-left reset-price-btn" id="resetPriceJabonera" style="display: none; cursor: pointer; margin-left: 8px; font-size: 0.85rem; opacity: 0.5; color: var(--primary);" title="Restablecer precio original"></i>
+                            </div>
+                        </div>
+                        <hr class="summary-divider">
+                        <div class="product-customizer-controls">
+                            <!-- Toggle Activation -->
+                            <label class="toggle-container">
+                                <input type="checkbox" id="checkJabonera" checked>
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-label-text">Incluir en mi pedido</span>
+                            </label>
+
+                            <div class="controls-row" id="controlsJabonera">
+                                <!-- Color selection -->
+                                <div class="color-control">
+                                    <span class="control-label-micro">Color Base:</span>
+                                    <div class="color-options-micro" data-target="Jabonera">
+                                        <button class="color-btn-micro active" data-color="Beige" style="background: linear-gradient(135deg, #E2E8F0, #CBD5E0);" data-name="Beige Soft (Foto)"></button>
+                                        <button class="color-btn-micro" data-color="Space Grey" style="background: linear-gradient(135deg, #4A5568, #2D3748);" data-name="Space Grey"></button>
+                                        <button class="color-btn-micro" data-color="Transparent" style="background: linear-gradient(135deg, rgba(255,255,255,0.7), rgba(255,255,255,0.2));" data-name="Transparente"></button>
+                                        <button class="color-btn-micro" data-color="Orange" style="background: linear-gradient(135deg, #ED8936, #DD6B20);" data-name="Naranja"></button>
+                                        <button class="color-btn-micro" data-color="Brown" style="background: linear-gradient(135deg, #7B341E, #4A1D0F);" data-name="Marrón"></button>
+                                        <button class="color-btn-micro" data-color="Black" style="background: linear-gradient(135deg, #1A202C, #0A0E17);" data-name="Negro"></button>
+                                        <button class="color-btn-micro" data-color="Blue" style="background: linear-gradient(135deg, #3182CE, #2B6CB0);" data-name="Azul"></button>
+                                        <button class="color-btn-micro" data-color="Red" style="background: linear-gradient(135deg, #E53E3E, #C53030);" data-name="Rojo"></button>
+                                        <button class="color-btn-micro" data-color="Green" style="background: linear-gradient(135deg, #48BB78, #38A169);" data-name="Verde"></button>
+                                    </div>
+                                    <span class="selected-micro-name" id="colorNameJabonera">Beige Soft (Foto)</span>
+                                </div>
+                                <!-- Quantity -->
+                                <div class="qty-control-wrapper">
+                                    <span class="control-label-micro">Cantidad:</span>
+                                    <div class="qty-selector">
+                                        <button class="qty-btn" id="minusJabonera"><i class="fa-solid fa-minus"></i></button>
+                                        <span class="qty-val" id="valJabonera">0</span>
+                                        <button class="qty-btn" id="plusJabonera"><i class="fa-solid fa-plus"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 2: Smart Toilet Roll Holder -->
+                    <div class="product-selection-card glassmorphism">
+                        <span class="product-category-badge">Ergonomía Diaria</span>
+                        <div class="product-card-header">
+                            <div class="product-main-visual">
+                                <img src="images/porta rollo papel higienico.gif" alt="Smart Toilet Roll Holder" class="catalog-thumb" id="imgPortarollo">
+                            </div>
+                            <div class="product-main-details">
+                                <h3>Smart Toilet Roll Holder</h3>
+                                <p class="product-card-desc" id="descPortarollo">Porta rollo con bandeja superior integrada y antideslizante para smartphone. Comodidad y firmeza técnica en tu baño.</p>
+                                <span class="card-price-tag" id="pricePortarollo">$7.765 ARS</span>
+                                <i class="fa-solid fa-rotate-left reset-price-btn" id="resetPricePortarollo" style="display: none; cursor: pointer; margin-left: 8px; font-size: 0.85rem; opacity: 0.5; color: var(--primary);" title="Restablecer precio original"></i>
+                            </div>
+                        </div>
+                        <hr class="summary-divider">
+                        <div class="product-customizer-controls">
+                            <!-- Toggle Activation -->
+                            <label class="toggle-container">
+                                <input type="checkbox" id="checkPortarollo" checked>
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-label-text">Incluir en mi pedido</span>
+                            </label>
+
+                            <div class="controls-row" id="controlsPortarollo">
+                                <!-- Color selection -->
+                                <div class="color-control">
+                                    <span class="control-label-micro">Color Base:</span>
+                                    <div class="color-options-micro" data-target="Portarollo">
+                                        <button class="color-btn-micro active" data-color="Space Grey" style="background: linear-gradient(135deg, #4A5568, #2D3748);" data-name="Space Grey (Foto)"></button>
+                                        <button class="color-btn-micro" data-color="Beige" style="background: linear-gradient(135deg, #E2E8F0, #CBD5E0);" data-name="Beige Soft"></button>
+                                        <button class="color-btn-micro" data-color="Transparent" style="background: linear-gradient(135deg, rgba(255,255,255,0.7), rgba(255,255,255,0.2));" data-name="Transparente"></button>
+                                        <button class="color-btn-micro" data-color="Orange" style="background: linear-gradient(135deg, #ED8936, #DD6B20);" data-name="Naranja"></button>
+                                        <button class="color-btn-micro" data-color="Brown" style="background: linear-gradient(135deg, #7B341E, #4A1D0F);" data-name="Marrón"></button>
+                                        <button class="color-btn-micro" data-color="Black" style="background: linear-gradient(135deg, #1A202C, #0A0E17);" data-name="Negro"></button>
+                                        <button class="color-btn-micro" data-color="Blue" style="background: linear-gradient(135deg, #3182CE, #2B6CB0);" data-name="Azul"></button>
+                                        <button class="color-btn-micro" data-color="Red" style="background: linear-gradient(135deg, #E53E3E, #C53030);" data-name="Rojo"></button>
+                                        <button class="color-btn-micro" data-color="Green" style="background: linear-gradient(135deg, #48BB78, #38A169);" data-name="Verde"></button>
+                                    </div>
+                                    <span class="selected-micro-name" id="colorNamePortarollo">Space Grey (Foto)</span>
+                                </div>
+                                <!-- Quantity -->
+                                <div class="qty-control-wrapper">
+                                    <span class="control-label-micro">Cantidad:</span>
+                                    <div class="qty-selector">
+                                        <button class="qty-btn" id="minusPortarollo"><i class="fa-solid fa-minus"></i></button>
+                                        <span class="qty-val" id="valPortarollo">0</span>
+                                        <button class="qty-btn" id="plusPortarollo"><i class="fa-solid fa-plus"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 4: Contenedor Hermético Roscado -->
+                    <div class="product-selection-card glassmorphism">
+                        <span class="product-category-badge">Organización Práctica</span>
+                        <div class="product-card-header">
+                            <div class="product-main-visual">
+                                <img src="images/contenedor_roscado_sin_fondo.png" alt="Contenedor Roscado 50mm" class="catalog-thumb" id="imgContenedor">
+                            </div>
+                            <div class="product-main-details">
+                                <h3>Contenedor Roscado 50mm</h3>
+                                <p class="product-card-desc" id="descContenedor">Contenedor cilíndrico estanco de 50mm con tapa roscada hermética. Ideal para viajes, organización de pequeños objetos y almacenamiento seguro.</p>
+                                <span class="card-price-tag" id="priceContenedor">$2.055 ARS</span>
+                                <i class="fa-solid fa-rotate-left reset-price-btn" id="resetPriceContenedor" style="display: none; cursor: pointer; margin-left: 8px; font-size: 0.85rem; opacity: 0.5; color: var(--primary);" title="Restablecer precio original"></i>
+                            </div>
+                        </div>
+                        <hr class="summary-divider">
+                        <div class="product-customizer-controls">
+                            <!-- Toggle Activation -->
+                            <label class="toggle-container">
+                                <input type="checkbox" id="checkContenedor" checked>
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-label-text">Incluir en mi pedido</span>
+                            </label>
+
+                            <div class="controls-row" id="controlsContenedor">
+                                <!-- Color selection -->
+                                <div class="color-control">
+                                    <span class="control-label-micro">Color Base:</span>
+                                    <div class="color-options-micro" data-target="Contenedor">
+                                        <button class="color-btn-micro active" data-color="Red" style="background: linear-gradient(135deg, #E53E3E, #C53030);" data-name="Rojo Fuego (Foto)"></button>
+                                        <button class="color-btn-micro" data-color="Beige" style="background: linear-gradient(135deg, #E2E8F0, #CBD5E0);" data-name="Beige Soft"></button>
+                                        <button class="color-btn-micro" data-color="Space Grey" style="background: linear-gradient(135deg, #4A5568, #2D3748);" data-name="Space Grey"></button>
+                                        <button class="color-btn-micro" data-color="Transparent" style="background: linear-gradient(135deg, rgba(255,255,255,0.7), rgba(255,255,255,0.2));" data-name="Transparente"></button>
+                                        <button class="color-btn-micro" data-color="Orange" style="background: linear-gradient(135deg, #ED8936, #DD6B20);" data-name="Naranja"></button>
+                                        <button class="color-btn-micro" data-color="Brown" style="background: linear-gradient(135deg, #7B341E, #4A1D0F);" data-name="Marrón"></button>
+                                        <button class="color-btn-micro" data-color="Black" style="background: linear-gradient(135deg, #1A202C, #0A0E17);" data-name="Negro"></button>
+                                        <button class="color-btn-micro" data-color="Blue" style="background: linear-gradient(135deg, #3182CE, #2B6CB0);" data-name="Azul"></button>
+                                        <button class="color-btn-micro" data-color="Green" style="background: linear-gradient(135deg, #48BB78, #38A169);" data-name="Verde"></button>
+                                    </div>
+                                    <span class="selected-micro-name" id="colorNameContenedor">Rojo Fuego (Foto)</span>
+                                </div>
+                                <!-- Quantity -->
+                                <div class="qty-control-wrapper">
+                                    <span class="control-label-micro">Cantidad:</span>
+                                    <div class="qty-selector">
+                                        <button class="qty-btn" id="minusContenedor"><i class="fa-solid fa-minus"></i></button>
+                                        <span class="qty-val" id="valContenedor">0</span>
+                                        <button class="qty-btn" id="plusContenedor"><i class="fa-solid fa-plus"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- /products-grid-cols Collection 1 -->
+
+                    <!-- COLLECTION 2: OFICINA & ESCRITORIO -->
+                    <div class="collection-header-inline" id="oficina-escritorio" style="margin-top: 48px; margin-bottom: 24px;">
+                        <h3><i class="fa-solid fa-briefcase"></i> Colección Oficina & Escritorio</h3>
+                    </div>
+
+                    <div class="products-grid-cols" id="grid-oficina-escritorio">
+
+                    <!-- Product 3: Organizador Compartimentado -->
+                    <div class="product-selection-card glassmorphism">
+                        <span class="product-category-badge">Oficina Técnica</span>
+                        <div class="product-card-header">
+                            <div class="product-main-visual">
+                                <img src="images/Organizador Compartimentado.png" alt="Organizador Compartimentado" class="catalog-thumb" id="imgOrganizador">
+                            </div>
+                            <div class="product-main-details">
+                                <h3>Organizador Compartimentado</h3>
+                                <p class="product-card-desc" id="descOrganizador">Bandeja organizadora de alta resistencia con diseño de rejilla calada y asa frontal integrada. Perfecta para ordenar cajones, estantes y escritorios. (160X226X95)</p>
+                                <span class="card-price-tag" id="priceOrganizador">$13.125 ARS</span>
+                                <i class="fa-solid fa-rotate-left reset-price-btn" id="resetPriceOrganizador" style="display: none; cursor: pointer; margin-left: 8px; font-size: 0.85rem; opacity: 0.5; color: var(--primary);" title="Restablecer precio original"></i>
+                            </div>
+                        </div>
+                        <hr class="summary-divider">
+                        <div class="product-customizer-controls">
+                            <!-- Toggle Activation -->
+                            <label class="toggle-container">
+                                <input type="checkbox" id="checkOrganizador" checked>
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-label-text">Incluir en mi pedido</span>
+                            </label>
+
+                            <div class="controls-row" id="controlsOrganizador">
+                                <!-- Color selection -->
+                                <div class="color-control">
+                                    <span class="control-label-micro">Color Base:</span>
+                                    <div class="color-options-micro" data-target="Organizador">
+                                        <button class="color-btn-micro active" data-color="Blue" style="background: linear-gradient(135deg, #3182CE, #2B6CB0);" data-name="Azul Corporativo (Foto)"></button>
+                                        <button class="color-btn-micro" data-color="Space Grey" style="background: linear-gradient(135deg, #4A5568, #2D3748);" data-name="Space Grey"></button>
+                                        <button class="color-btn-micro" data-color="Beige" style="background: linear-gradient(135deg, #E2E8F0, #CBD5E0);" data-name="Beige Soft"></button>
+                                        <button class="color-btn-micro" data-color="Transparent" style="background: linear-gradient(135deg, rgba(255,255,255,0.7), rgba(255,255,255,0.2));" data-name="Transparente"></button>
+                                        <button class="color-btn-micro" data-color="Orange" style="background: linear-gradient(135deg, #ED8936, #DD6B20);" data-name="Naranja"></button>
+                                        <button class="color-btn-micro" data-color="Brown" style="background: linear-gradient(135deg, #7B341E, #4A1D0F);" data-name="Marrón"></button>
+                                        <button class="color-btn-micro" data-color="Black" style="background: linear-gradient(135deg, #1A202C, #0A0E17);" data-name="Negro"></button>
+                                        <button class="color-btn-micro" data-color="Red" style="background: linear-gradient(135deg, #E53E3E, #C53030);" data-name="Rojo"></button>
+                                        <button class="color-btn-micro" data-color="Green" style="background: linear-gradient(135deg, #48BB78, #38A169);" data-name="Verde"></button>
+                                    </div>
+                                    <span class="selected-micro-name" id="colorNameOrganizador">Azul Corporativo (Foto)</span>
+                                </div>
+                                <!-- Quantity -->
+                                <div class="qty-control-wrapper">
+                                    <span class="control-label-micro">Cantidad:</span>
+                                    <div class="qty-selector">
+                                        <button class="qty-btn" id="minusOrganizador"><i class="fa-solid fa-minus"></i></button>
+                                        <span class="qty-val" id="valOrganizador">0</span>
+                                        <button class="qty-btn" id="plusOrganizador"><i class="fa-solid fa-plus"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 5: Organizador de Escritorio Moderno -->
+                    <div class="product-selection-card glassmorphism">
+                        <span class="product-category-badge">Diseño Nórdico</span>
+                        <div class="product-card-header">
+                            <div class="product-main-visual">
+                                <img src="images/organizador moderno de escritorio.webp" alt="Organizador de Escritorio Moderno" class="catalog-thumb" id="imgOrganizadorModerno">
+                            </div>
+                            <div class="product-main-details">
+                                <h3>Organizador de Escritorio Moderno</h3>
+                                <p class="product-card-desc" id="descOrganizadorModerno">Organizador premium minimalista en dos piezas encastrables. Espacio dedicado para smartphone, bolígrafos, notas y clips con acabado ultra suave.</p>
+                                <span class="card-price-tag" id="priceOrganizadorModerno">$13.320 ARS</span>
+                                <i class="fa-solid fa-rotate-left reset-price-btn" id="resetPriceOrganizadorModerno" style="display: none; cursor: pointer; margin-left: 8px; font-size: 0.85rem; opacity: 0.5; color: var(--primary);" title="Restablecer precio original"></i>
+                            </div>
+                        </div>
+                        <hr class="summary-divider">
+                        <div class="product-customizer-controls">
+                            <!-- Toggle Activation -->
+                            <label class="toggle-container">
+                                <input type="checkbox" id="checkOrganizadorModerno" checked>
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-label-text">Incluir en mi pedido</span>
+                            </label>
+
+                            <div class="controls-row" id="controlsOrganizadorModerno">
+                                <!-- Color selection -->
+                                <div class="color-control">
+                                    <span class="control-label-micro">Color Base:</span>
+                                    <div class="color-options-micro" data-target="OrganizadorModerno">
+                                        <button class="color-btn-micro active" data-color="Space Grey" style="background: linear-gradient(135deg, #4A5568, #2D3748);" data-name="Space Grey (Foto)"></button>
+                                        <button class="color-btn-micro" data-color="Beige" style="background: linear-gradient(135deg, #E2E8F0, #CBD5E0);" data-name="Beige Soft"></button>
+                                        <button class="color-btn-micro" data-color="Transparent" style="background: linear-gradient(135deg, rgba(255,255,255,0.7), rgba(255,255,255,0.2));" data-name="Transparente"></button>
+                                        <button class="color-btn-micro" data-color="Orange" style="background: linear-gradient(135deg, #ED8936, #DD6B20);" data-name="Naranja"></button>
+                                        <button class="color-btn-micro" data-color="Brown" style="background: linear-gradient(135deg, #7B341E, #4A1D0F);" data-name="Marrón"></button>
+                                        <button class="color-btn-micro" data-color="Black" style="background: linear-gradient(135deg, #1A202C, #0A0E17);" data-name="Negro"></button>
+                                        <button class="color-btn-micro" data-color="Blue" style="background: linear-gradient(135deg, #3182CE, #2B6CB0);" data-name="Azul"></button>
+                                        <button class="color-btn-micro" data-color="Red" style="background: linear-gradient(135deg, #E53E3E, #C53030);" data-name="Rojo"></button>
+                                        <button class="color-btn-micro" data-color="Green" style="background: linear-gradient(135deg, #48BB78, #38A169);" data-name="Verde"></button>
+                                    </div>
+                                    <span class="selected-micro-name" id="colorNameOrganizadorModerno">Space Grey (Foto)</span>
+                                </div>
+                                <!-- Quantity -->
+                                <div class="qty-control-wrapper">
+                                    <span class="control-label-micro">Cantidad:</span>
+                                    <div class="qty-selector">
+                                        <button class="qty-btn" id="minusOrganizadorModerno"><i class="fa-solid fa-minus"></i></button>
+                                        <span class="qty-val" id="valOrganizadorModerno">0</span>
+                                        <button class="qty-btn" id="plusOrganizadorModerno"><i class="fa-solid fa-plus"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div> <!-- /products-grid-cols Collection 2 -->
+
+                    <!-- COLLECTION 3: MASCOTAS & RECREACIÓN -->
+                    <div class="collection-header-inline" id="mascotas-recreacion" style="margin-top: 48px; margin-bottom: 24px;">
+                        <h3><i class="fa-solid fa-paw"></i> Colección Mascotas & Recreación</h3>
+                    </div>
+
+                    <div class="products-grid-cols" id="grid-mascotas-recreacion">
+                        <!-- Product 6: Juguete Esfera Geodésica Geo-Ball -->
+                        <div class="product-selection-card glassmorphism">
+                            <span class="product-category-badge">Mascotas & Recreación</span>
+                            <div class="product-card-header">
+                                <div class="product-main-visual">
+                                    <img src="images/jaguete_gato.jpg" alt="Juguete Esfera Geodésica Geo-Ball" class="catalog-thumb" id="imgJugueteGato" onerror="this.src='images/juguete_gato.jpg'">
+                                </div>
+                                <div class="product-main-details">
+                                    <h3>Juguete Esfera Geodésica "Geo-Ball"</h3>
+                                    <p class="product-card-desc" id="descJugueteGato">Juguete modular interactivo en forma de esfera geodésica. Incluye cascabel interior y estructura ultra-resistente ideal para el juego activo de felinos.</p>
+                                    <span class="card-price-tag" id="priceJugueteGato">$2.875 ARS</span>
+                                    <i class="fa-solid fa-rotate-left reset-price-btn" id="resetPriceJugueteGato" style="display: none; cursor: pointer; margin-left: 8px; font-size: 0.85rem; opacity: 0.5; color: var(--primary);" title="Restablecer precio original"></i>
+                                </div>
+                            </div>
+                            <hr class="summary-divider">
+                            <div class="product-customizer-controls">
+                                <!-- Toggle Activation -->
+                                <label class="toggle-container">
+                                    <input type="checkbox" id="checkJugueteGato" checked>
+                                    <span class="toggle-slider"></span>
+                                    <span class="toggle-label-text">Incluir en mi pedido</span>
+                                </label>
+
+                                <div class="controls-row" id="controlsJugueteGato">
+                                    <!-- Color selection -->
+                                    <div class="color-control">
+                                        <span class="control-label-micro">Color Base:</span>
+                                        <div class="color-options-micro" data-target="JugueteGato">
+                                            <button class="color-btn-micro active" data-color="Brown" style="background: linear-gradient(135deg, #7B341E, #4A1D0F);" data-name="Marrón Orgánico (Foto)"></button>
+                                            <button class="color-btn-micro" data-color="Beige" style="background: linear-gradient(135deg, #E2E8F0, #CBD5E0);" data-name="Beige Soft"></button>
+                                            <button class="color-btn-micro" data-color="Space Grey" style="background: linear-gradient(135deg, #4A5568, #2D3748);" data-name="Space Grey"></button>
+                                            <button class="color-btn-micro" data-color="Orange" style="background: linear-gradient(135deg, #ED8936, #DD6B20);" data-name="Naranja"></button>
+                                            <button class="color-btn-micro" data-color="Black" style="background: linear-gradient(135deg, #1A202C, #0A0E17);" data-name="Negro"></button>
+                                            <button class="color-btn-micro" data-color="Blue" style="background: linear-gradient(135deg, #3182CE, #2B6CB0);" data-name="Azul"></button>
+                                            <button class="color-btn-micro" data-color="Red" style="background: linear-gradient(135deg, #E53E3E, #C53030);" data-name="Rojo"></button>
+                                            <button class="color-btn-micro" data-color="Green" style="background: linear-gradient(135deg, #48BB78, #38A169);" data-name="Verde"></button>
+                                            <button class="color-btn-micro" data-color="Transparent" style="background: linear-gradient(135deg, rgba(255,255,255,0.7), rgba(255,255,255,0.2));" data-name="Transparente"></button>
+                                        </div>
+                                        <span class="selected-micro-name" id="colorNameJugueteGato">Marrón Orgánico (Foto)</span>
+                                    </div>
+                                    <!-- Quantity -->
+                                    <div class="qty-control-wrapper">
+                                        <span class="control-label-micro">Cantidad:</span>
+                                        <div class="qty-selector">
+                                            <button class="qty-btn" id="minusJugueteGato"><i class="fa-solid fa-minus"></i></button>
+                                            <span class="qty-val" id="valJugueteGato">0</span>
+                                            <button class="qty-btn" id="plusJugueteGato"><i class="fa-solid fa-plus"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+                <!-- Right side: General Order Summary sticky card -->
+                <div class="price-summary-wrapper" id="pedido">
+                    <div class="price-summary-card glassmorphism highlighted-card sticky-card">
+                        <span class="best-choice-badge"><i class="fa-solid fa-basket-shopping"></i> MI PEDIDO</span>
+                        <h3>Resumen General</h3>
+                        
+                        <div id="summaryItemsContainer">
+                            <!-- Se renderiza dinámicamente con app.js -->
+                        </div>
+                        
+                        <hr class="summary-divider">
+                        
+                        <div class="price-total-display">
+                            <span class="total-label">Total Combinado</span>
+                            <span class="total-amount" id="totalPriceDisplay">$0,00 ARS</span>
+                            <p class="payment-note">*Cotizado en Pesos Argentinos. Pago por transferencia bancaria o Mercado Pago.</p>
+                        </div>
+
+                        <a href="#" class="btn btn-primary btn-block btn-lg" id="btnOrder">
+                            <i class="fa-brands fa-whatsapp"></i> Confirmar Pedido en WhatsApp
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-container">
+            <div class="footer-brand">
+                <span class="logo-text">GRAVITY<span class="highlight">3D</span></span>
+                <p>Objetos que desafían lo común. Diseñados y manufacturados con pasión técnica y funcional en Argentina.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Nuestros Pilares</h4>
+                <ul>
+                    <li><a href="#pilares">Diseño Ergonómico</a></li>
+                    <li><a href="#pilares">Calidad Premium</a></li>
+                    <li><a href="#pilares">Materiales Nobles</a></li>
+                </ul>
+            </div>
+            <div class="footer-social">
+                <h4>Comunidad 3D</h4>
+                <div class="social-icons">
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-whatsapp"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 GRAVITY 3D Studio. Todos los derechos reservados. Envíos a todo el país. <i class="fa-solid fa-key" id="adminKeyIcon" style="cursor: pointer; opacity: 0.2; font-size: 0.8rem; margin-left: 8px;" title="Modo Administrador"></i> | <span id="emergencyResetBtn" style="cursor: pointer; opacity: 0.3; font-size: 0.8rem; text-decoration: underline; color: var(--text-muted);" title="Restablecer base de datos y limpiar caché de emergencia">Restablecer Datos</span></p>
+        </div>
+    </footer>
+
+    <!-- Slicer Telemetry Modal -->
+    <div id="telemetryModal" class="telemetry-modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 8, 15, 0.85); backdrop-filter: blur(12px); z-index: 2000; align-items: center; justify-content: center; padding: 24px;">
+        <div class="telemetry-modal-container glassmorphism highlighted-card animate-pulse" style="width: 100%; max-width: 900px; background: var(--bg-card); border-color: rgba(255,255,255,0.1); border-radius: 28px; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 32px; padding: 36px; position: relative; max-height: 90vh; overflow-y: auto;">
+            
+            <!-- Close Button -->
+            <button id="closeTelemetryBtn" style="position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; color: white; cursor: pointer; font-size: 1rem; transition: var(--transition);">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            
+            <!-- Left Side: Slicer Preview Image -->
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+                <h3 style="font-size: 1.4rem; color: white; margin-bottom: 0; font-family: var(--font-heading); display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-microchip" style="color: var(--primary);"></i> Previsualización Slicer
+                </h3>
+                <div style="border-radius: 18px; border: 1px solid var(--glass-border); overflow: hidden; background: rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; min-height: 250px; box-shadow: 0 15px 30px rgba(0,0,0,0.4);">
+                    <img id="telemetrySlicerImg" src="" alt="Previsualización de Laminado" style="width: 100%; height: auto; display: block; object-fit: contain;">
+                </div>
+                <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; margin: 0;">
+                    *Esta captura representa la previsualización del laminador en Bambu Studio / Orca Slicer para auditar el gasto de filamento y horas.
+                </p>
+            </div>
+            
+            <!-- Right Side: Cost Breakdown & Calculations -->
+            <div style="display: flex; flex-direction: column; gap: 20px; padding-top: 10px;">
+                <div>
+                    <span id="telemetryProdBadge" class="product-category-badge" style="position: static; margin-bottom: 8px; display: inline-block;">PETG Marrón</span>
+                    <h2 id="telemetryProdTitle" style="font-size: 1.8rem; color: white; font-family: var(--font-heading); margin-bottom: 8px; font-weight: 800; line-height: 1.2;">Geo-Ball</h2>
+                    <p id="telemetryProdDesc" style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; margin: 0; min-height: 60px;">Descripción...</p>
+                </div>
+                
+                <div style="display: flex; flex-direction: column; gap: 12px; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); padding: 20px; border-radius: 16px;">
+                    <h4 style="margin: 0; color: white; font-size: 0.95rem; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 8px; display: flex; align-items: center; gap: 8px; font-family: var(--font-heading);">
+                        <i class="fa-solid fa-chart-simple" style="color: var(--primary);"></i> Desglose de Telemetría Real
+                    </h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 0.82rem; color: var(--text-muted);">
+                        <div>
+                            <span>Material Base:</span>
+                            <strong id="telemetryMat" style="color: white; display: block; font-size: 0.9rem;">PETG Premium</strong>
+                        </div>
+                        <div>
+                            <span>Peso Consumido:</span>
+                            <strong id="telemetryWeight" style="color: white; display: block; font-size: 0.9rem;">38.83 g</strong>
+                        </div>
+                        <div>
+                            <span>Tiempo Impresión:</span>
+                            <strong id="telemetryTime" style="color: white; display: block; font-size: 0.9rem;">2h 02m</strong>
+                        </div>
+                        <div>
+                            <span>Costo de Extrusión:</span>
+                            <strong id="telemetryMatCost" style="color: white; display: block; font-size: 0.9rem;">$1.304 ARS</strong>
+                        </div>
+                        <div>
+                            <span>Energía Eléctrica:</span>
+                            <strong id="telemetryEnergyCost" style="color: white; display: block; font-size: 0.9rem;">$31 ARS</strong>
+                        </div>
+                        <div>
+                            <span>Amortización Máquina:</span>
+                            <strong id="telemetryAmortCost" style="color: white; display: block; font-size: 0.9rem;">$406 ARS</strong>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="display: flex; flex-direction: column; gap: 10px; background: var(--primary-glow-05); border: 1px solid rgba(var(--primary-rgb), 0.15); padding: 20px; border-radius: 16px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 0.85rem; color: var(--text-muted);">Costo Neto de Fabricación:</span>
+                        <strong id="telemetryNetCost" style="font-size: 1.15rem; color: var(--primary); font-family: var(--font-heading);">$1.742 ARS</strong>
+                    </div>
+                    <hr style="border: none; border-top: 1px solid rgba(var(--primary-rgb), 0.1); margin: 4px 0;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 0.9rem; color: white; font-weight: 600;">Precio de Venta Sugerido:</span>
+                        <strong id="telemetrySuggestedPrice" style="font-size: 1.45rem; color: #48BB78; font-family: var(--font-heading);">$2.875 ARS</strong>
+                    </div>
+                    <p id="telemetryMarginIntel" style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; margin: 4px 0 0 0; text-align: center;">
+                        *Precio calculado aplicando Margen Premium de 1.65x y Redondeo Comercial Gravity 3D.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Login Modal -->
+    <div id="adminLoginModal" class="telemetry-modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 8, 15, 0.85); backdrop-filter: blur(12px); z-index: 2100; align-items: center; justify-content: center; padding: 24px;">
+        <div class="telemetry-modal-container glassmorphism highlighted-card" style="width: 100%; max-width: 400px; padding: 32px; position: relative; border-color: rgba(245, 101, 101, 0.25); text-align: center; display: flex; flex-direction: column; gap: 20px;">
+            <!-- Close Button -->
+            <button id="closeAdminLoginBtn" style="position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; color: white; cursor: pointer; font-size: 0.85rem; transition: var(--transition);">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div style="font-size: 2.2rem; color: var(--primary);"><i class="fa-solid fa-lock animate-float"></i></div>
+            
+            <h3 style="font-size: 1.4rem; color: white; font-family: var(--font-heading); margin: 0;">Panel de Administración</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0; line-height: 1.5;">Ingrese la clave secreta del taller para activar las herramientas de costeo y edición de catálogo.</p>
+            
+            <div style="position: relative; width: 100%;">
+                <input type="password" id="adminPasswordInput" placeholder="Clave de Taller..." style="width: 100%; padding: 12px 40px 12px 16px; border-radius: 12px; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); color: white; font-family: var(--font-body); font-size: 0.95rem; outline: none; transition: var(--transition); text-align: center;">
+                <i class="fa-solid fa-eye-slash" id="toggleAdminPassView" style="position: absolute; right: 15px; top: 15px; color: var(--text-muted); cursor: pointer; transition: var(--transition);" title="Mostrar contraseña"></i>
+            </div>
+            
+            <div id="adminLoginFeedback" style="display: none; font-size: 0.8rem; color: #E53E3E; font-weight: 600; margin-top: -8px;"></div>
+            
+            <div style="display: flex; gap: 12px;">
+                <button type="button" id="btnCancelAdminLogin" class="btn btn-outline" style="flex: 1; border-radius: 12px; padding: 12px; font-size: 0.88rem; border-color: rgba(255,255,255,0.1);">Cancelar</button>
+                <button type="button" id="btnSubmitAdminLogin" class="btn btn-primary" style="flex: 1; border-radius: 12px; padding: 12px; font-size: 0.88rem;">Acceder</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botón Flotante de Carrito / Canasta -->
+    <button class="floating-cart-btn" id="floatingCartBtn" title="Ver mi pedido">
+        <i class="fa-solid fa-basket-shopping"></i>
+        <span class="cart-badge" id="cartBadgeCount">0</span>
+    </button>
+
+    <!-- Mobile Nav Script & App Logic -->
+    <script src="app.js"></script>
+</body>
+</html>

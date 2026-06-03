@@ -1,0 +1,96 @@
+{
+  "constants": {
+    "energia_kwh_ars": 110.0,
+    "consumo_p1s_kw_h": 0.14,
+    "amortizacion_h_ars": 200.0,
+    "precios_por_gramo": {
+      "PETG": 32.0,
+      "PLA": 28.0,
+      "ABS": 35.0
+    },
+    "margen_purga": 0.05
+  },
+  "inventario": [
+    {
+      "Material": "PETG",
+      "Color": "Beige",
+      "Marca": "GST3D",
+      "Stock Inicial": 500.0,
+      "Consumo": 309.21,
+      "Stock Actual": 190.79,
+      "Estado": "✅ Óptimo"
+    },
+    {
+      "Material": "PETG",
+      "Color": "Transparent",
+      "Marca": "GST3D",
+      "Stock Inicial": 800.0,
+      "Consumo": 0.0,
+      "Stock Actual": 800.0,
+      "Estado": "✅ Óptimo"
+    },
+    {
+      "Material": "PETG",
+      "Color": "Space Grey",
+      "Marca": "GST3D",
+      "Stock Inicial": 500.0,
+      "Consumo": 94.72,
+      "Stock Actual": 405.28,
+      "Estado": "✅ Óptimo"
+    },
+    {
+      "Material": "PETG",
+      "Color": "Orange",
+      "Marca": "GST3D",
+      "Stock Inicial": 2000.0,
+      "Consumo": 86.82,
+      "Stock Actual": 1913.18,
+      "Estado": "✅ Óptimo"
+    },
+    {
+      "Material": "PETG",
+      "Color": "Brown",
+      "Marca": "GST3D",
+      "Stock Inicial": 5000.0,
+      "Consumo": 38.83,
+      "Stock Actual": 4961.17,
+      "Estado": "✅ Óptimo"
+    },
+    {
+      "Material": "PETG",
+      "Color": "Black",
+      "Marca": "GST3D",
+      "Stock Inicial": 500.0,
+      "Consumo": 39.25,
+      "Stock Actual": 460.75,
+      "Estado": "✅ Óptimo"
+    },
+    {
+      "Material": "PETG",
+      "Color": "Blue",
+      "Marca": "GST3D",
+      "Stock Inicial": 800.0,
+      "Consumo": 158.63,
+      "Stock Actual": 641.37,
+      "Estado": "✅ Óptimo"
+    },
+    {
+      "Material": "PETG",
+      "Color": "Red",
+      "Marca": "GST3D",
+      "Stock Inicial": 700.0,
+      "Consumo": 20.44,
+      "Stock Actual": 679.56,
+      "Estado": "✅ Óptimo"
+    },
+    {
+      "Material": "PETG",
+      "Color": "Green",
+      "Marca": "GST3D",
+      "Stock Inicial": 1700.0,
+      "Consumo": 0.0,
+      "Stock Actual": 1700.0,
+      "Estado": "✅ Óptimo"
+    }
+  ]
+}

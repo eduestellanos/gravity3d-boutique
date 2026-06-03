@@ -1,0 +1,15 @@
+# Configuración de despliegue automático en Render.com
+services:
+  - type: web # Servicio Web accesible públicamente por HTTP/HTTPS
+    name: gravity3d-boutique # Nombre de tu servicio en el panel de Render
+    env: node # Entorno de ejecución oficial para Node.js
+    plan: starter # Plan Starter requerido para el soporte de almacenamiento en disco persistente
+    buildCommand: npm install # Comando de inicialización e instalación de dependencias
+    startCommand: node server.js # Comando de arranque del servidor backend
+    envVars:
+      - key: DATA_DIR # Variable de entorno para indicarle a la app dónde escribir
+        value: /opt/render/project/src/data # Ruta del directorio correspondiente al disco montado
+    disk:
+      name: database-storage # Identificador único del volumen persistente
+      mountPath: /opt/render/project/src/data # Punto de montaje físico dentro del contenedor de la app
+      sizeGB: 1 # Tamaño de almacenamiento de 1 Gigabyte (suficiente para miles de productos y configuraciones)

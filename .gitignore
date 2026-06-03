@@ -1,0 +1,18 @@
+# Omitir módulos de dependencias locales
+node_modules/
+
+# Omitir archivos de configuración local privada
+.env
+
+# Omitir carpetas de copias de seguridad locales
+backup_9/
+backup_10/
+backup_final/
+
+# Omitir scripts de arranque local de Windows
+*.bat
+
+# Omitir archivos del entorno de inteligencia artificial
+.gemini/
+brain/
+scratch/

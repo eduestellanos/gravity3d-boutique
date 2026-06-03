@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GRAVITY 3D | Objetos Inteligentes & Diseño Premium</title>
+    <meta name="description" content="Redefinimos tus espacios diarios con impresiones 3D premium en PETG de grado técnico. Diseño funcional, estético y ultra resistente.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="container nav-container">
+            <div class="logo">
+                <span class="logo-icon"><i class="fa-solid fa-cube animate-float"></i></span>
+                <span class="logo-text">GRAVITY<span class="highlight">3D</span></span>
+            </div>
+            <nav class="nav-menu">
+                <a href="#producto" class="nav-link">El Producto</a>
+                <a href="#especificaciones" class="nav-link">Especificaciones</a>
+                <a href="#personalizar" class="nav-link">Colores</a>
+                <a href="#contacto" class="btn btn-secondary nav-btn">Pedir por WhatsApp</a>
+            </nav>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="inicio">
+        <div class="hero-bg-glow"></div>
+        <div class="container hero-container">
+            <div class="hero-content">
+                <span class="badge"><i class="fa-solid fa-star"></i> Lanzamiento Exclusivo</span>
+                <h1 class="hero-title">Tu teléfono tiene un lugar en todos lados. <span class="gradient-text">Incluso donde no te lo imaginabas.</span></h1>
+                <p class="hero-description">
+                    Presentamos el <strong>Smart Toilet Roll Holder</strong>. Un objeto cotidiano rediseñado bajo estándares de ingeniería conceptual: ergonomía perfecta, bandeja antideslizante para smartphone y resistencia estructural insuperable.
+                </p>
+                <div class="hero-cta-group">
+                    <a href="#producto" class="btn btn-primary btn-lg">Descubrir Diseño</a>
+                    <a href="#personalizar" class="btn btn-outline btn-lg">Ver Colores Disponibles</a>
+                </div>
+                <div class="hero-trust">
+                    <div class="trust-item"><i class="fa-solid fa-shield-halved"></i> PETG Técnico</div>
+                    <div class="trust-item"><i class="fa-solid fa-truck-fast"></i> Envíos a todo el país</div>
+                    <div class="trust-item"><i class="fa-solid fa-rotate-left"></i> 100% Garantía</div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="image-wrapper animate-float-slow">
+                    <!-- Referencia a la foto del producto terminado subida por el usuario -->
+                    <img src="toilet_holder.jpg" alt="Smart Toilet Roll Holder Premium" class="hero-img" id="productHeroImage">
+                    <div class="glass-tag price-tag animate-pulse">
+                        <span class="price-label">PRECIO EXCLUSIVO</span>
+                        <span class="price-val">$11.645,<span class="cents">66</span> ARS</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hook / Value Prop Section -->
+    <section class="value-prop" id="producto">
+        <div class="container">
+            <div class="section-header">
+                <span class="subtitle">Ingeniería del Día a Día</span>
+                <h2>¿Por qué no es solo "otra" pieza impresa en 3D?</h2>
+                <p class="section-desc">Combinamos mecánica de materiales con diseño estético para crear soluciones que duran toda la vida.</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="card-icon"><i class="fa-solid fa-shield"></i></div>
+                    <h3>PETG de Grado Técnico</h3>
+                    <p>Fabricado en PETG Premium de alta resistencia. A diferencia del PLA común, soporta humedad extrema, impactos y no se deforma con el paso del tiempo.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="card-icon"><i class="fa-solid fa-mobile-screen-button"></i></div>
+                    <h3>Dock Antideslizante</h3>
+                    <p>Diseño de bandeja superior texturada con bordes elevados que evitan caídas y resguardan tu smartphone con seguridad absoluta.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="card-icon"><i class="fa-solid fa-fill-drip"></i></div>
+                    <h3>Acabado Ultra Premium</h3>
+                    <p>Laminado y optimizado en OrcaSlicer para eliminar imperfecciones visuales, garantizando un acabado texturado sobrio y elegante.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Showcase Detail -->
+    <section class="details-section" id="especificaciones">
+        <div class="container details-container">
+            <div class="details-image">
+                <div class="specs-card glassmorphism">
+                    <h3><i class="fa-solid fa-microscope text-primary"></i> Reporte del Laminador</h3>
+                    <ul class="specs-list">
+                        <li><span>Tecnología:</span> FFF (Modelado por Fusión de Filamento)</li>
+                        <li><span>Impresora:</span> Bambu Lab P1S High-Speed</li>
+                        <li><span>Material:</span> PETG Space Grey (Grado de Ingeniería)</li>
+                        <li><span>Peso Final:</span> 90.21 gramos (+5% purga técnica)</li>
+                        <li><span>Tiempo de impresión:</span> 3 horas y 57 minutos</li>
+                        <li><span>Estructura interna:</span> Giroide de alta resistencia mecánica</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="details-content">
+                <span class="subtitle">Funcionalidad sin Compromisos</span>
+                <h2>Redefiní la estética de tu baño con un toque tecnológico</h2>
+                <p>
+                    El <strong>Smart Toilet Roll Holder</strong> fue concebido eliminando soportes innecesarios durante la impresión para optimizar la cohesión de capas. El resultado es un monobloque rígido con anclajes reforzados capaz de soportar hasta 5 kg de carga vertical sin fatiga del material.
+                </p>
+                <div class="features-list">
+                    <div class="feature-item">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <div>
+                            <strong>Instalación Flexible:</strong> Compatible con fijación tradicional por tornillos o cinta doble faz de alta resistencia.
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <div>
+                            <strong>Ergonomía de Extracción:</strong> El ángulo del rodillo permite un giro fluido del papel higiénico evitando atascos o roturas.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Customization / Pricing Calculator -->
+    <section class="customization" id="personalizar">
+        <div class="container">
+            <div class="section-header">
+                <span class="subtitle">Tu Espacio, Tu Estilo</span>
+                <h2>Personalizá tu pedido al instante</h2>
+                <p class="section-desc">Seleccioná tu color preferido de nuestra paleta activa de PETG y calculá el costo de tu lote en tiempo real.</p>
+            </div>
+
+            <div class="custom-grid">
+                <!-- Color Selector Card -->
+                <div class="custom-card glassmorphism">
+                    <h3>1. Elegí tu Color Premium</h3>
+                    <div class="color-options" id="colorSelector">
+                        <button class="color-btn active" data-color="Space Grey" style="background: linear-gradient(135deg, #4A5568, #2D3748);" data-name="Space Grey (Predeterminado - Foto)"></button>
+                        <button class="color-btn" data-color="Beige" style="background: linear-gradient(135deg, #E2E8F0, #CBD5E0);" data-name="Beige Soft"></button>
+                        <button class="color-btn" data-color="Transparent" style="background: linear-gradient(135deg, rgba(255,255,255,0.7), rgba(255,255,255,0.2)); border: 1px solid rgba(255,255,255,0.4);" data-name="Transparente Cristal"></button>
+                        <button class="color-btn" data-color="Orange" style="background: linear-gradient(135deg, #ED8936, #DD6B20);" data-name="Naranja Eléctrico"></button>
+                        <button class="color-btn" data-color="Brown" style="background: linear-gradient(135deg, #7B341E, #4A1D0F);" data-name="Marrón Orgánico"></button>
+                        <button class="color-btn" data-color="Black" style="background: linear-gradient(135deg, #1A202C, #0A0E17);" data-name="Negro Mate Industrial"></button>
+                        <button class="color-btn" data-color="Blue" style="background: linear-gradient(135deg, #3182CE, #2B6CB0);" data-name="Azul Corporativo"></button>
+                        <button class="color-btn" data-color="Red" style="background: linear-gradient(135deg, #E53E3E, #C53030);" data-name="Rojo Fuego"></button>
+                        <button class="color-btn" data-color="Green" style="background: linear-gradient(135deg, #48BB78, #38A169);" data-name="Verde Orgánico"></button>
+                    </div>
+                    <p class="selected-color-text">Color seleccionado: <strong id="selectedColorName">Space Grey (Predeterminado - Foto)</strong></p>
+
+                    <div class="qty-selector-wrapper">
+                        <h3>2. Cantidad de Unidades</h3>
+                        <div class="qty-selector">
+                            <button class="qty-btn" id="qtyMinus"><i class="fa-solid fa-minus"></i></button>
+                            <span class="qty-val" id="qtyValue">1</span>
+                            <button class="qty-btn" id="qtyPlus"><i class="fa-solid fa-plus"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Price Card -->
+                <div class="price-summary-card glassmorphism highlighted-card">
+                    <span class="best-choice-badge">PROPUESTA DE VALOR</span>
+                    <h3>Resumen del Pedido</h3>
+                    
+                    <div class="summary-line">
+                        <span>Smart Toilet Roll Holder</span>
+                        <span id="summaryQty">1x</span>
+                    </div>
+                    <div class="summary-line">
+                        <span>Color:</span>
+                        <strong id="summaryColor">Space Grey</strong>
+                    </div>
+                    <div class="summary-line">
+                        <span>Material:</span>
+                        <span>PETG Técnico</span>
+                    </div>
+                    <div class="summary-line">
+                        <span>Garantía estructural:</span>
+                        <span class="text-success">6 meses</span>
+                    </div>
+                    
+                    <hr class="summary-divider">
+                    
+                    <div class="price-total-display">
+                        <span class="total-label">Total Estimado</span>
+                        <span class="total-amount" id="totalPriceDisplay">$11.645,66 ARS</span>
+                        <p class="payment-note">*Facturado en Pesos Argentinos. Transferencia o Mercado Pago.</p>
+                    </div>
+
+                    <a href="#" class="btn btn-primary btn-block btn-lg" id="btnOrder">
+                        <i class="fa-brands fa-whatsapp"></i> Enviar Pedido a WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-container">
+            <div class="footer-brand">
+                <span class="logo-text">GRAVITY<span class="highlight">3D</span></span>
+                <p>Objetos que desafían lo común. Diseñados y manufacturados con pasión técnica en Argentina.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Nuestros Pilares</h4>
+                <ul>
+                    <li><a href="#producto">Mecánica de Precisión</a></li>
+                    <li><a href="#especificaciones">Laminación Óptima</a></li>
+                    <li><a href="#personalizar">PETG de Ingeniería</a></li>
+                </ul>
+            </div>
+            <div class="footer-social">
+                <h4>Comunidad 3D</h4>
+                <div class="social-icons">
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-whatsapp"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 GRAVITY 3D Studio. Todos los derechos reservados. Bambu Lab P1S Partner.</p>
+        </div>
+    </footer>
+
+    <!-- Mobile Nav Script & App Logic -->
+    <script src="app.js"></script>
+</body>
+</html>
