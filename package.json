@@ -1,0 +1,10 @@
+{
+  "name": "gravity3d-boutique",
+  "version": "1.0.0",
+  "description": "Boutique Comercial Gravity 3D",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {}
+}
