@@ -2395,7 +2395,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 name: p.name,
                 collection: p.collectionName || p.collectionId.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
                 material: p.telemetry ? p.telemetry.material : 'PETG',
-                price: p.price,
+                price: products[p.key]?.price || p.price,
                 origin: 'Personalizado'
             }));
             
@@ -2477,7 +2477,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 name: p.name,
                 collection: p.collectionName || p.collectionId.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
                 material: p.telemetry ? p.telemetry.material : 'PETG',
-                price: p.price,
+                price: products[p.key]?.price || p.price,
                 photo: p.photo,
                 origin: 'Personalizado'
             }));
