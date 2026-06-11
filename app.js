@@ -49,6 +49,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Estado del Administrador (Clave: gravity3d)
     let isAdmin = localStorage.getItem('isAdmin') === 'true';
 
+    // Configuración central de WhatsApp (Ingresar el número del taller con código de país, ej: 5491100000000)
+    const WHATSAPP_PHONE = '5491100000000';
+
     // Código Mayorista / Venta al Público (+40% por defecto)
     let wholesaleCodeEntered = localStorage.getItem('wholesaleCodeEntered') === 'true';
 
@@ -727,14 +730,13 @@ document.addEventListener('DOMContentLoaded', () => {
         totalPriceDisplay.textContent = formattedTotal;
 
         // Configurar enlace a WhatsApp
-        const phoneNumber = '5491100000000'; // Reemplazar por número real del taller
         const messageText = `¡Hola Gravity 3D! 🚀 Me encantaría realizar el siguiente pedido premium:\n\n` +
                             whatsappProductLines +
                             `💳 *Total General:* ${formattedTotal} ARS\n\n` +
                             `Quedo atento para coordinar el método de pago y el envío. ¡Muchas gracias!`;
 
         const encodedMessage = encodeURIComponent(messageText);
-        btnOrder.href = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+        btnOrder.href = `https://wa.me/${WHATSAPP_PHONE}?text=${encodedMessage}`;
     }
 
     // Configurar clic en el botón flotante del carrito (smooth-scroll y animación premium)
@@ -3325,6 +3327,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Configurar enlaces estáticos de WhatsApp (botón flotante y footer)
+    function setupStaticWhatsappLinks() {
+        const floatWhatsappBtn = document.getElementById('floatingWhatsappBtn');
+        if (floatWhatsappBtn) {
+            floatWhatsappBtn.href = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent("¡Hola Gravity 3D! 🚀 Quisiera realizar una consulta sobre los productos del catálogo...")}`;
+        }
+
+        const footerWhatsappLink = document.querySelector('.footer-whatsapp-link');
+        if (footerWhatsappLink) {
+            footerWhatsappLink.href = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent("¡Hola Gravity 3D! 🚀 Quisiera recibir más información sobre el taller...")}`;
+        }
+    }
+
     // Inicialización del cálculo general y sincronización de precios al público/mayorista
     updateAllPricesInDOM();
+    setupStaticWhatsappLinks();
 });
