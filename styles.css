@@ -859,6 +859,17 @@ footer {
     }
 }
 
+@keyframes menuSlideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 @media (max-width: 768px) {
     .navbar {
         padding: 12px 0;
@@ -868,8 +879,71 @@ footer {
         display: none;
     }
     
+    .nav-menu.active {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: rgba(11, 15, 25, 0.96);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--glass-border);
+        padding: 24px 20px;
+        gap: 16px;
+        z-index: 999;
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
+        animation: menuSlideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    
+    .nav-menu.active .nav-link {
+        width: 100%;
+        text-align: center;
+        padding: 10px 0;
+        font-size: 1.05rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    }
+    
+    .nav-menu.active .theme-switcher {
+        margin: 5px 0;
+        justify-content: center;
+        display: flex;
+    }
+    
+    .nav-menu.active .wholesale-trigger {
+        margin: 5px 0;
+        padding: 6px 14px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        width: auto;
+        min-width: 140px;
+        justify-content: center;
+        display: flex;
+    }
+    
+    .nav-menu.active .wholesale-trigger input {
+        width: 70px !important;
+        font-size: 0.95rem !important;
+        color: rgba(255, 255, 255, 0.8) !important;
+    }
+    
+    .nav-menu.active .nav-btn {
+        width: 100%;
+        text-align: center;
+        padding: 12px 0;
+        margin-top: 5px;
+    }
+    
     .mobile-menu-btn {
         display: block;
+        transition: transform 0.3s ease;
+    }
+    
+    .mobile-menu-btn.active {
+        transform: rotate(90deg);
     }
     
     .hero {

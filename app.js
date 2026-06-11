@@ -3343,4 +3343,50 @@ document.addEventListener('DOMContentLoaded', () => {
     // Inicialización del cálculo general y sincronización de precios al público/mayorista
     updateAllPricesInDOM();
     setupStaticWhatsappLinks();
+
+    // --- SOPORTE PARA MENÚ DE NAVEGACIÓN MÓVIL ---
+    function setupMobileMenu() {
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navMenu = document.querySelector('.nav-menu');
+        
+        if (mobileMenuBtn && navMenu) {
+            mobileMenuBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                navMenu.classList.toggle('active');
+                mobileMenuBtn.classList.toggle('active');
+                
+                // Cambiar icono entre barras y cruz
+                const icon = mobileMenuBtn.querySelector('i');
+                if (icon) {
+                    if (navMenu.classList.contains('active')) {
+                        icon.className = 'fa-solid fa-xmark';
+                    } else {
+                        icon.className = 'fa-solid fa-bars';
+                    }
+                }
+            });
+
+            // Cerrar menú al hacer clic en un enlace de navegación
+            const navLinks = navMenu.querySelectorAll('.nav-link, .nav-btn');
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    navMenu.classList.remove('active');
+                    mobileMenuBtn.classList.remove('active');
+                    const icon = mobileMenuBtn.querySelector('i');
+                    if (icon) icon.className = 'fa-solid fa-bars';
+                });
+            });
+
+            // Cerrar menú al hacer clic fuera de él
+            document.addEventListener('click', (e) => {
+                if (navMenu.classList.contains('active') && !navMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                    navMenu.classList.remove('active');
+                    mobileMenuBtn.classList.remove('active');
+                    const icon = mobileMenuBtn.querySelector('i');
+                    if (icon) icon.className = 'fa-solid fa-bars';
+                }
+            });
+        }
+    }
+    setupMobileMenu();
 });
