@@ -49,6 +49,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // Estado del Administrador (Clave: gravity3d)
     let isAdmin = localStorage.getItem('isAdmin') === 'true';
 
+    // Código Mayorista / Venta al Público (+40% por defecto)
+    let wholesaleCodeEntered = localStorage.getItem('wholesaleCodeEntered') === 'true';
+
+    function getDisplayPrice(basePrice) {
+        if (wholesaleCodeEntered) {
+            return basePrice;
+        } else {
+            return customRound(basePrice * 1.40);
+        }
+    }
+
     // --- HELPERS PARA GUARDAR DATOS Y SUBIR IMÁGENES AL SERVIDOR NODE.JS ---
     function persistDataToServer(sync = false) {
         if (!serverAvailable) return;
@@ -412,7 +423,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="product-main-details">
                             <h3>${prod.name} ${isAdmin ? `<i class="fa-solid fa-pen-to-square btn-edit-product-trigger" data-product-key="${prod.key}" style="cursor: pointer; margin-left: 8px; font-size: 0.95rem; color: var(--primary); transition: var(--transition);" title="Editar telemetría y detalles del producto"></i>` : ''}</h3>
                             <p class="product-card-desc" id="desc_${prod.key}">${prod.desc}</p>
-                            <span class="card-price-tag ${isAdmin ? 'admin-editable' : ''}" id="price_${prod.key}">$${new Intl.NumberFormat('es-AR').format(products[prod.key].price)} ARS</span>
+                            <span class="card-price-tag ${isAdmin ? 'admin-editable' : ''}" id="price_${prod.key}">$${new Intl.NumberFormat('es-AR').format(getDisplayPrice(products[prod.key].price))} ARS</span>
                             ${isAdmin ? `<i class="fa-solid fa-rotate-left reset-price-btn" id="resetPrice_${prod.key}" style="cursor: pointer; margin-left: 8px; font-size: 0.85rem; opacity: 0.5; color: var(--primary);" title="Restablecer precio original"></i>` : ''}
                         </div>
                     </div>
@@ -641,7 +652,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (prod.active && prod.qty > 0) {
                 hasActiveProducts = true;
                 totalQty += prod.qty;
-                const subtotal = customRound(prod.price * prod.qty);
+                const displayPrice = getDisplayPrice(prod.price);
+                const subtotal = customRound(displayPrice * prod.qty);
                 total += subtotal;
 
                 const formattedSubtotal = new Intl.NumberFormat('es-AR', {
@@ -786,9 +798,62 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Helper to map product keys to their HTML price element IDs
+    function getPriceElementId(key) {
+        const mapping = {
+            jabonera: 'priceJabonera',
+            portarollo: 'pricePortarollo',
+            organizador: 'priceOrganizador',
+            contenedor: 'priceContenedor',
+            organizador_moderno: 'priceOrganizadorModerno',
+            juguete_gato: 'priceJugueteGato'
+        };
+        return mapping[key] || `price_${key}`;
+    }
 
+    // Function to synchronize all price displays in the DOM based on wholesale or retail mode
+    function updateAllPricesInDOM() {
+        for (const [key, prod] of Object.entries(products)) {
+            const priceId = getPriceElementId(key);
+            const el = document.getElementById(priceId);
+            if (el) {
+                const displayPrice = getDisplayPrice(prod.price);
+                el.textContent = `$${new Intl.NumberFormat('es-AR').format(displayPrice)} ARS`;
+            }
+        }
+        updateTotalOrder(); // Update active order subtotals and totals
+    }
 
+    // Setup listener for the discreet wholesale code input box in the navbar
+    const mayoristaCodeInput = document.getElementById('mayoristaCodeInput');
+    if (mayoristaCodeInput) {
+        // Show masked indicators if already active
+        if (wholesaleCodeEntered) {
+            mayoristaCodeInput.value = '••••••••';
+        }
 
+        mayoristaCodeInput.addEventListener('input', () => {
+            const val = mayoristaCodeInput.value.trim().toLowerCase();
+            if (val === 'gravity3d' || val === 'mayorista' || val === 'mayorista3d') {
+                wholesaleCodeEntered = true;
+                localStorage.setItem('wholesaleCodeEntered', 'true');
+                mayoristaCodeInput.value = '••••••••'; // mask the code
+                mayoristaCodeInput.blur();
+                updateAllPricesInDOM();
+                alert("🔓 Modo Mayorista Activado: Mostrando valores actuales de fábrica.");
+            }
+        });
+
+        mayoristaCodeInput.addEventListener('focus', () => {
+            // When clicked/focused, reset to retail mode so the user can re-enter or clear the code
+            if (wholesaleCodeEntered) {
+                mayoristaCodeInput.value = '';
+                wholesaleCodeEntered = false;
+                localStorage.setItem('wholesaleCodeEntered', 'false');
+                updateAllPricesInDOM();
+            }
+        });
+    }
 
     // Configuración del Modo Administrador y personalización comercial (Los cambios se realizan a nivel de nombres/rutas estáticas o precios)
 
@@ -825,7 +890,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             currency: 'ARS',
                             minimumFractionDigits: 0,
                             maximumFractionDigits: 0
-                        }).format(products[key].price);
+                        }).format(getDisplayPrice(products[key].price));
 
                         updateTotalOrder();
                         persistDataToServer();
@@ -878,10 +943,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
 
-                const newPrice = customRound(parseFloat(cleanText));
-                if (!isNaN(newPrice) && newPrice >= 0) {
-                    products[key].price = newPrice;
-                    localStorage.setItem(`price_${key}`, newPrice);
+                const enteredPrice = parseFloat(cleanText);
+                if (!isNaN(enteredPrice) && enteredPrice >= 0) {
+                    const newBasePrice = wholesaleCodeEntered ? customRound(enteredPrice) : customRound(enteredPrice / 1.40);
+                    products[key].price = newBasePrice;
+                    localStorage.setItem(`price_${key}`, newBasePrice);
                     updateTotalOrder();
                     persistDataToServer();
                     renderAdminCatalogChecklist();
@@ -892,7 +958,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     currency: 'ARS',
                     minimumFractionDigits: 0,
                     maximumFractionDigits: 0
-                }).format(products[key].price);
+                }).format(getDisplayPrice(products[key].price));
             });
         } else {
             if (resetBtn) {
@@ -2184,7 +2250,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <div class="product-main-details">
                                     <h3>${newProduct.name} ${isAdmin ? `<i class="fa-solid fa-pen-to-square btn-edit-product-trigger" data-product-key="${newProduct.key}" style="cursor: pointer; margin-left: 8px; font-size: 0.95rem; color: var(--primary); transition: var(--transition);" title="Editar telemetría y detalles del producto"></i>` : ''}</h3>
                                     <p class="product-card-desc" id="desc_${newProduct.key}">${newProduct.desc}</p>
-                                    <span class="card-price-tag ${isAdmin ? 'admin-editable' : ''}" id="price_${newProduct.key}">$${new Intl.NumberFormat('es-AR').format(products[newProduct.key].price)} ARS</span>
+                                    <span class="card-price-tag ${isAdmin ? 'admin-editable' : ''}" id="price_${newProduct.key}">$${new Intl.NumberFormat('es-AR').format(getDisplayPrice(products[newProduct.key].price))} ARS</span>
                                     ${isAdmin ? `<i class="fa-solid fa-rotate-left reset-price-btn" id="resetPrice_${newProduct.key}" style="cursor: pointer; margin-left: 8px; font-size: 0.85rem; opacity: 0.5; color: var(--primary);" title="Restablecer precio original"></i>` : ''}
                                 </div>
                             </div>
@@ -2795,7 +2861,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Precio sugerido o precio activo en la tienda (que puede estar editado en vivo!)
         const activePrice = products[key] ? products[key].price : (netCost * data.margin);
-        const activePriceRounded = customRound(activePrice);
+        const activePriceRounded = customRound(getDisplayPrice(activePrice));
         
         // Formatear ARS
         const formatARS = (val) => new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(val);
@@ -3259,6 +3325,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Inicialización del cálculo general
-    updateTotalOrder();
+    // Inicialización del cálculo general y sincronización de precios al público/mayorista
+    updateAllPricesInDOM();
 });
