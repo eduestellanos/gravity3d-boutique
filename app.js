@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let isAdmin = localStorage.getItem('isAdmin') === 'true';
 
     // Configuración central de WhatsApp (Ingresar el número del taller con código de país, ej: 5491100000000)
-    const WHATSAPP_PHONE = '5491100000000';
+    const WHATSAPP_PHONE = '5493434483188';
 
     // Código Mayorista / Venta al Público (+40% por defecto)
     let wholesaleCodeEntered = localStorage.getItem('wholesaleCodeEntered') === 'true';
