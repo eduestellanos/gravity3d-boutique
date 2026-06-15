@@ -46,14 +46,18 @@ document.addEventListener('DOMContentLoaded', () => {
         console.warn("⚠️ Servidor de disco no disponible (ejecución estática autónoma). Se usará LocalStorage del navegador.");
     }
 
+    // Limpieza de claves residuales de localStorage para forzar inicio en público en clientes existentes
+    localStorage.removeItem('isAdmin');
+    localStorage.removeItem('wholesaleCodeEntered');
+
     // Estado del Administrador (Clave: gravity3d)
-    let isAdmin = localStorage.getItem('isAdmin') === 'true';
+    let isAdmin = sessionStorage.getItem('isAdmin') === 'true';
 
     // Configuración central de WhatsApp (Ingresar el número del taller con código de país, ej: 5491100000000)
     const WHATSAPP_PHONE = '5493434483188';
 
     // Código Mayorista / Venta al Público (+40% por defecto)
-    let wholesaleCodeEntered = localStorage.getItem('wholesaleCodeEntered') === 'true';
+    let wholesaleCodeEntered = sessionStorage.getItem('wholesaleCodeEntered') === 'true';
 
     function getDisplayPrice(basePrice) {
         if (wholesaleCodeEntered) {
@@ -771,13 +775,13 @@ document.addEventListener('DOMContentLoaded', () => {
         
         adminKeyIcon.addEventListener('click', () => {
             if (isAdmin) {
-                localStorage.setItem('isAdmin', 'false');
+                sessionStorage.setItem('isAdmin', 'false');
                 alert("🔒 Modo Administrador DESACTIVADO. La carga de imágenes está bloqueada para visitantes.");
                 location.reload();
             } else {
                 const password = prompt("🔐 Ingrese la clave de administrador para editar imágenes:");
                 if (password && password.trim().toLowerCase() === "gravity3d") {
-                    localStorage.setItem('isAdmin', 'true');
+                    sessionStorage.setItem('isAdmin', 'true');
                     alert("🔓 ¡Modo Administrador ACTIVADO! Ahora podés cambiar las fotos/GIFs del catálogo haciendo clic sobre ellas.");
                     location.reload();
                 } else if (password !== null) {
@@ -838,7 +842,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const val = mayoristaCodeInput.value.trim().toLowerCase();
             if (val === 'gravity3d' || val === 'mayorista' || val === 'mayorista3d') {
                 wholesaleCodeEntered = true;
-                localStorage.setItem('wholesaleCodeEntered', 'true');
+                sessionStorage.setItem('wholesaleCodeEntered', 'true');
                 mayoristaCodeInput.value = '••••••••'; // mask the code
                 mayoristaCodeInput.blur();
                 updateAllPricesInDOM();
@@ -851,7 +855,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (wholesaleCodeEntered) {
                 mayoristaCodeInput.value = '';
                 wholesaleCodeEntered = false;
-                localStorage.setItem('wholesaleCodeEntered', 'false');
+                sessionStorage.setItem('wholesaleCodeEntered', 'false');
                 updateAllPricesInDOM();
             }
         });
