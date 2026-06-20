@@ -1307,6 +1307,90 @@ document.addEventListener('DOMContentLoaded', () => {
         materialPriceInput.value = prices[material] || 32.0;
     }
     
+    function recalculateAllProductsPrices(material, newPrice) {
+        let localInv = getSafeInventory();
+        const rates = localInv.constants;
+        const originalKeys = ['jabonera', 'portarollo', 'organizador', 'contenedor', 'organizador_moderno', 'juguete_gato'];
+        
+        const getFactoryDomId = (key) => {
+            if (key === 'organizador_moderno') return 'priceOrganizadorModerno';
+            if (key === 'juguete_gato') return 'priceJugueteGato';
+            return 'price' + key.charAt(0).toUpperCase() + key.slice(1);
+        };
+        
+        // 1. Recalcular productos de fábrica
+        originalKeys.forEach(key => {
+            const hardcoded = hardcodedTelemetry[key];
+            if (hardcoded && hardcoded.material === material) {
+                const weight = hardcoded.weight;
+                const hours = hardcoded.hours;
+                const minutes = hardcoded.minutes;
+                const margin = 1.65;
+                const printTimeHours = hours + (minutes / 60);
+                
+                const rawFilamentCost = weight * newPrice * (1 + rates.margen_purga);
+                const rawEnergyCost = printTimeHours * rates.consumo_p1s_kw_h * rates.energia_kwh_ars;
+                const rawAmortCost = printTimeHours * rates.amortizacion_h_ars;
+                const netCost = rawFilamentCost + rawEnergyCost + rawAmortCost;
+                const suggestedPrice = customRound(netCost * margin);
+                
+                localStorage.setItem(`price_${key}`, suggestedPrice);
+                if (products[key]) {
+                    products[key].price = suggestedPrice;
+                }
+                
+                const domId = getFactoryDomId(key);
+                const priceEl = document.getElementById(domId);
+                if (priceEl) {
+                    priceEl.textContent = `$${new Intl.NumberFormat('es-AR').format(getDisplayPrice(suggestedPrice))} ARS`;
+                }
+            }
+        });
+        
+        // 2. Recalcular productos personalizados
+        let customProds = getSafeCustomProducts();
+        let modified = false;
+        
+        customProds = customProds.map(prod => {
+            if (prod.telemetry && prod.telemetry.material === material) {
+                const weight = prod.telemetry.weight;
+                const hours = prod.telemetry.hours;
+                const minutes = prod.telemetry.minutes;
+                const margin = prod.telemetry.margin || 1.65;
+                const printTimeHours = hours + (minutes / 60);
+                
+                const rawFilamentCost = weight * newPrice * (1 + rates.margen_purga);
+                const rawEnergyCost = printTimeHours * rates.consumo_p1s_kw_h * rates.energia_kwh_ars;
+                const rawAmortCost = printTimeHours * rates.amortizacion_h_ars;
+                const netCost = rawFilamentCost + rawEnergyCost + rawAmortCost;
+                const suggestedPrice = customRound(netCost * margin);
+                
+                prod.price = suggestedPrice;
+                prod.telemetry.filamentCost = rawFilamentCost;
+                prod.telemetry.netCost = netCost;
+                
+                localStorage.setItem(`price_${prod.key}`, suggestedPrice);
+                if (products[prod.key]) {
+                    products[prod.key].price = suggestedPrice;
+                }
+                
+                const priceEl = document.getElementById(`price_${prod.key}`);
+                if (priceEl) {
+                    priceEl.textContent = `$${new Intl.NumberFormat('es-AR').format(getDisplayPrice(suggestedPrice))} ARS`;
+                }
+                modified = true;
+            }
+            return prod;
+        });
+        
+        if (modified) {
+            localStorage.setItem('custom_products', JSON.stringify(customProds));
+        }
+        
+        updateTotalOrder();
+        renderAdminCatalogChecklist();
+    }
+
     function saveMaterialPriceToLocal() {
         if (!newProdMaterial || !materialPriceInput) return;
         const material = newProdMaterial.value;
@@ -1317,6 +1401,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (localInv && localInv.constants && localInv.constants.precios_por_gramo) {
             localInv.constants.precios_por_gramo[material] = newPrice;
             localStorage.setItem('gravity_inventory', JSON.stringify(localInv));
+            
+            // Recalcular precios de todos los productos del catálogo que usan este filamento
+            recalculateAllProductsPrices(material, newPrice);
+            
             persistDataToServer();
         }
     }
@@ -3393,4 +3481,168 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     setupMobileMenu();
+
+    // ==========================================================================
+    // GOOGLE DRIVE CUSTOMER FOLDER AUTOMATION
+    // ==========================================================================
+    // IMPORTANTE: Reemplaza esta URL con la que te proporcione Google Sheets
+    // al publicar el script como Aplicación Web.
+    const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbznXvRztkytd3oqLCDMJD8HOIL24PDikY_INK3tM1OEqs4YwQcNRUWdfW1hVrRXDmk9/exec';
+
+    const customerDataModal = document.getElementById('customerDataModal');
+    const closeCustomerDataBtn = document.getElementById('closeCustomerDataBtn');
+    const submitCustomerOrderBtn = document.getElementById('submitCustomerOrderBtn');
+    const customerNameInput = document.getElementById('customerNameInput');
+    const customerNameError = document.getElementById('customerNameError');
+    const loaderCustomerModal = document.getElementById('loaderCustomerModal');
+
+    console.log("DEBUG GRAVITY 3D:", {
+        btnOrder: btnOrder,
+        customerDataModal: customerDataModal,
+        closeCustomerDataBtn: closeCustomerDataBtn,
+        submitCustomerOrderBtn: submitCustomerOrderBtn
+    });
+
+    // Interceptar el clic original del botón de WhatsApp usando delegación de eventos
+    document.addEventListener('click', function(e) {
+        const target = e.target.closest('#btnOrder');
+        if (target) {
+            e.preventDefault(); // Detener redirección automática directa
+            e.stopPropagation(); // Detener propagación
+            
+            console.log("Clic de confirmación interceptado vía delegación.");
+            
+            if (customerDataModal) {
+                // Limpiar estados previos
+                customerNameInput.value = '';
+                customerNameError.style.display = 'none';
+                if (loaderCustomerModal) loaderCustomerModal.style.display = 'none';
+                submitCustomerOrderBtn.disabled = false;
+                
+                // Abrir modal de datos
+                customerDataModal.style.display = 'flex';
+                customerNameInput.focus();
+            }
+        }
+    });
+
+    if (btnOrder && customerDataModal) {
+
+        // Cerrar modal al hacer clic en la "X"
+        if (closeCustomerDataBtn) {
+            closeCustomerDataBtn.addEventListener('click', function() {
+                customerDataModal.style.display = 'none';
+            });
+        }
+
+        // Cerrar modal al hacer clic fuera del contenedor
+        customerDataModal.addEventListener('click', function(e) {
+            if (e.target === customerDataModal) {
+                customerDataModal.style.display = 'none';
+            }
+        });
+
+        // Procesar pedido y continuar
+        submitCustomerOrderBtn.addEventListener('click', async function() {
+            const clienteNombre = customerNameInput.value.trim();
+
+            if (!clienteNombre) {
+                customerNameError.style.display = 'block';
+                return;
+            }
+
+            customerNameError.style.display = 'none';
+            submitCustomerOrderBtn.disabled = true;
+            if (loaderCustomerModal) loaderCustomerModal.style.display = 'flex';
+
+            // Recopilar datos del carrito
+            const productosComprados = [];
+            let totalPedido = 0;
+
+            for (const [key, prod] of Object.entries(products)) {
+                if (prod.active && prod.qty > 0) {
+                    const displayPrice = getDisplayPrice(prod.price);
+                    const subtotal = customRound(displayPrice * prod.qty);
+                    totalPedido += subtotal;
+                    productosComprados.push({
+                        nombre: prod.name,
+                        color: prod.friendlyColor || 'N/A',
+                        cantidad: prod.qty,
+                        subtotal: subtotal
+                    });
+                }
+            }
+
+            // Función auxiliar para continuar a WhatsApp
+            const continuarAWhatsApp = () => {
+                let messageText = `¡Hola Gravity 3D! 🚀 Mi nombre es *${clienteNombre}* y me encantaría realizar el siguiente pedido premium:\n\n`;
+                let whatsappProductLines = '';
+
+                productosComprados.forEach(prod => {
+                    const formattedSub = new Intl.NumberFormat('es-AR', {
+                        style: 'currency',
+                        currency: 'ARS',
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0
+                    }).format(prod.subtotal);
+
+                    whatsappProductLines += `📦 *${prod.nombre}*\n` +
+                                            `   🎨 Color: ${prod.color}\n` +
+                                            `   🔢 Cantidad: ${prod.cantidad} unidad(es)\n` +
+                                            `   💵 Subtotal: ${formattedSub}\n\n`;
+                });
+
+                const formattedTotal = new Intl.NumberFormat('es-AR', {
+                    style: 'currency',
+                    currency: 'ARS',
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                }).format(totalPedido);
+
+                messageText += whatsappProductLines +
+                               `💳 *Total General:* ${formattedTotal} ARS\n\n` +
+                               `Quedo atento para coordinar el método de pago y el envío. ¡Muchas gracias!`;
+
+                const encodedMessage = encodeURIComponent(messageText);
+                const whatsappUrl = `https://wa.me/${WHATSAPP_PHONE}?text=${encodedMessage}`;
+                
+                // Abrir en pestaña nueva y ocultar el loader/modal
+                window.open(whatsappUrl, '_blank');
+                customerDataModal.style.display = 'none';
+            };
+
+            // Si no se configuró una URL de Apps Script todavía, saltar directamente a WhatsApp
+            if (!GOOGLE_APPS_SCRIPT_URL || GOOGLE_APPS_SCRIPT_URL === 'URL_DE_TU_WEB_APP') {
+                continuarAWhatsApp();
+                return;
+            }
+
+            // Enviar petición en segundo plano de forma resiliente
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 6000); // 6 segundos de tiempo límite
+
+                await fetch(GOOGLE_APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors', // Evita conflictos de preflight CORS en el navegador
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        cliente: clienteNombre,
+                        productos: productosComprados,
+                        total: totalPedido
+                    }),
+                    signal: controller.signal
+                });
+
+                clearTimeout(timeoutId);
+            } catch (err) {
+                console.warn("No se pudo automatizar la creación de la carpeta de Drive (modo resiliente):", err);
+            } finally {
+                // Redirigir siempre al cliente, pase lo que pase
+                continuarAWhatsApp();
+            }
+        });
+    }
 });

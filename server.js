@@ -179,14 +179,29 @@ const server = http.createServer((req, res) => {
                     else if (mimeType === 'image/gif') ext = '.gif';
                     else if (mimeType === 'image/webp') ext = '.webp';
 
+                    // Sanitizar la clave para evitar path traversal en la escritura
+                    const safeKey = key.replace(/[^a-zA-Z0-9_-]/g, '');
+                    if (!safeKey) {
+                        res.writeHead(400);
+                        res.end(JSON.stringify({ error: 'Clave de imagen inválida o vacía tras sanitización' }));
+                        return;
+                    }
+
                     // Crear carpeta de subidas si no existe
-                    const uploadsDir = path.join(DATA_DIR, 'images', 'uploads');
+                    const uploadsDir = path.resolve(DATA_DIR, 'images', 'uploads');
                     if (!fs.existsSync(uploadsDir)) {
                         fs.mkdirSync(uploadsDir, { recursive: true });
                     }
 
-                    const filename = `custom_image_${key}${ext}`;
-                    const filePath = path.join(uploadsDir, filename);
+                    const filename = `custom_image_${safeKey}${ext}`;
+                    const filePath = path.resolve(uploadsDir, filename);
+
+                    // Verificar límite de directorio (Double Check)
+                    if (!filePath.startsWith(uploadsDir)) {
+                        res.writeHead(400);
+                        res.end(JSON.stringify({ error: 'Intento de Path Traversal detectado en la escritura' }));
+                        return;
+                    }
 
                     fs.writeFileSync(filePath, buffer);
 
@@ -210,9 +225,25 @@ const server = http.createServer((req, res) => {
     let filePath;
     if (urlPath.startsWith('/images/uploads/') || urlPath.startsWith('images/uploads/')) {
         const relativePath = urlPath.startsWith('/') ? urlPath.substring('/images/uploads/'.length) : urlPath.substring('images/uploads/'.length);
-        filePath = path.join(DATA_DIR, 'images', 'uploads', relativePath);
+        const uploadsDir = path.resolve(DATA_DIR, 'images', 'uploads');
+        filePath = path.resolve(uploadsDir, relativePath);
+
+        // Validar que no se salga de la carpeta de subidas
+        if (!filePath.startsWith(uploadsDir)) {
+            res.writeHead(403, { 'Content-Type': 'text/html; charset=utf-8' });
+            res.end('<h1>403 - Acceso Prohibido</h1><p>No tienes permiso para acceder a este recurso.</p>', 'utf-8');
+            return;
+        }
     } else {
-        filePath = path.join(__dirname, urlPath === '/' ? 'index.html' : urlPath);
+        const publicDir = path.resolve(__dirname);
+        filePath = path.resolve(publicDir, urlPath === '/' ? 'index.html' : urlPath.replace(/^\//, ''));
+
+        // Validar que no se salga de la carpeta del proyecto
+        if (!filePath.startsWith(publicDir)) {
+            res.writeHead(403, { 'Content-Type': 'text/html; charset=utf-8' });
+            res.end('<h1>403 - Acceso Prohibido</h1><p>No tienes permiso para acceder a este recurso.</p>', 'utf-8');
+            return;
+        }
     }
 
     const extname = String(path.extname(filePath)).toLowerCase();
@@ -239,16 +270,18 @@ const server = http.createServer((req, res) => {
     });
 });
 
-server.listen(PORT, () => {
+const HOST = process.env.RENDER ? '0.0.0.0' : '127.0.0.1';
+
+server.listen(PORT, HOST, () => {
     console.log(`🚀 Servidor de Gravity 3D iniciado con exito!`);
-    console.log(`🌍 Puerto de escucha: ${PORT}`);
+    console.log(`🌍 URL de acceso: http://${HOST}:${PORT}`);
     console.log(`📂 Directorio de persistencia: ${DATA_DIR}`);
     
     // Intentar abrir el navegador por defecto automaticamente solo en Windows local
     if (process.platform === 'win32' && !process.env.RENDER) {
         try {
             const { exec } = require('child_process');
-            exec(`start http://localhost:${PORT}`);
+            exec(`start http://${HOST}:${PORT}`);
         } catch (e) {
             console.warn("No se pudo iniciar el navegador automaticamente:", e.message);
         }

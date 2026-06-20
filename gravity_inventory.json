@@ -4,7 +4,7 @@
     "consumo_p1s_kw_h": 0.14,
     "amortizacion_h_ars": 200,
     "precios_por_gramo": {
-      "PETG": 18,
+      "PETG": 45,
       "PLA": 28,
       "ABS": 35
     },
