@@ -52,6 +52,7 @@ const server = http.createServer((req, res) => {
                 let customDescriptions = {};
                 let deletedFactoryProducts = [];
                 let disabledProducts = [];
+                let customTelemetry = {};
 
                 const cpPath = path.join(DATA_DIR, 'custom_products.json');
                 const ciPath = path.join(DATA_DIR, 'custom_images.json');
@@ -60,6 +61,7 @@ const server = http.createServer((req, res) => {
                 const cdPath = path.join(DATA_DIR, 'custom_descriptions.json');
                 const dfpPath = path.join(DATA_DIR, 'deleted_factory_products.json');
                 const dpPath = path.join(DATA_DIR, 'disabled_products.json');
+                const ctPath = path.join(DATA_DIR, 'custom_telemetry.json');
 
                 if (fs.existsSync(cpPath)) {
                     customProducts = JSON.parse(fs.readFileSync(cpPath, 'utf8'));
@@ -82,6 +84,9 @@ const server = http.createServer((req, res) => {
                 if (fs.existsSync(dpPath)) {
                     disabledProducts = JSON.parse(fs.readFileSync(dpPath, 'utf8'));
                 }
+                if (fs.existsSync(ctPath)) {
+                    customTelemetry = JSON.parse(fs.readFileSync(ctPath, 'utf8'));
+                }
 
                 res.writeHead(200);
                 res.end(JSON.stringify({
@@ -91,7 +96,8 @@ const server = http.createServer((req, res) => {
                     custom_prices: customPrices,
                     custom_descriptions: customDescriptions,
                     deleted_factory_products: deletedFactoryProducts,
-                    disabled_products: disabledProducts
+                    disabled_products: disabledProducts,
+                    custom_telemetry: customTelemetry
                 }));
             } catch (err) {
                 res.writeHead(500);
@@ -113,6 +119,7 @@ const server = http.createServer((req, res) => {
                     const cdPath = path.join(DATA_DIR, 'custom_descriptions.json');
                     const dfpPath = path.join(DATA_DIR, 'deleted_factory_products.json');
                     const dpPath = path.join(DATA_DIR, 'disabled_products.json');
+                    const ctPath = path.join(DATA_DIR, 'custom_telemetry.json');
 
                     if (data.custom_products !== undefined) {
                         fs.writeFileSync(cpPath, JSON.stringify(data.custom_products, null, 2), 'utf8');
@@ -134,6 +141,9 @@ const server = http.createServer((req, res) => {
                     }
                     if (data.disabled_products !== undefined) {
                         fs.writeFileSync(dpPath, JSON.stringify(data.disabled_products, null, 2), 'utf8');
+                    }
+                    if (data.custom_telemetry !== undefined) {
+                        fs.writeFileSync(ctPath, JSON.stringify(data.custom_telemetry, null, 2), 'utf8');
                     }
 
                     res.writeHead(200);

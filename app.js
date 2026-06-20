@@ -41,6 +41,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data.disabled_products) {
                 localStorage.setItem('disabled_products', JSON.stringify(data.disabled_products));
             }
+            if (data.custom_telemetry) {
+                for (const [k, val] of Object.entries(data.custom_telemetry)) {
+                    localStorage.setItem(`telemetry_${k}`, JSON.stringify(val));
+                }
+            }
         }
     } catch (e) {
         console.warn("⚠️ Servidor de disco no disponible (ejecución estática autónoma). Se usará LocalStorage del navegador.");
@@ -67,6 +72,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function getFactoryMaterial(key, defaultMat) {
+        const savedTelemetryRaw = localStorage.getItem(`telemetry_${key}`);
+        if (savedTelemetryRaw) {
+            try {
+                const savedTelemetry = JSON.parse(savedTelemetryRaw);
+                if (savedTelemetry && savedTelemetry.material) {
+                    return savedTelemetry.material;
+                }
+            } catch(e) {}
+        }
+        return defaultMat;
+    }
+
     // --- HELPERS PARA GUARDAR DATOS Y SUBIR IMÁGENES AL SERVIDOR NODE.JS ---
     function persistDataToServer(sync = false) {
         if (!serverAvailable) return;
@@ -82,6 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const customDescriptions = {};
 
             // 1. Productos de fábrica
+            const customTelemetry = {};
             const originalKeys = ['jabonera', 'portarollo', 'organizador', 'contenedor', 'organizador_moderno', 'juguete_gato'];
             originalKeys.forEach(k => {
                 const img = localStorage.getItem(`custom_image_${k}`);
@@ -92,6 +111,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const desc = localStorage.getItem(`desc_${k}`);
                 if (desc) customDescriptions[k] = desc;
+
+                const tel = localStorage.getItem(`telemetry_${k}`);
+                if (tel) customTelemetry[k] = JSON.parse(tel);
             });
 
             // 2. Productos personalizados (pueden tener precios/descripciones/imágenes)
@@ -116,7 +138,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 custom_prices: customPrices,
                 custom_descriptions: customDescriptions,
                 deleted_factory_products: deletedFactoryProducts,
-                disabled_products: disabledProducts
+                disabled_products: disabledProducts,
+                custom_telemetry: customTelemetry
             };
 
             const xhr = new XMLHttpRequest();
@@ -479,22 +502,37 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Cargar imágenes personalizadas para productos hardcoded si existen en localStorage
+    // Cargar imágenes y telemetrías personalizadas para productos hardcoded si existen en localStorage
     const originalKeys = ['jabonera', 'portarollo', 'organizador', 'contenedor', 'organizador_moderno', 'juguete_gato'];
     originalKeys.forEach(key => {
         const savedImg = localStorage.getItem(`custom_image_${key}`);
-        if (savedImg) {
-            let domSuffix = key.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('');
-            if (key === 'organizador_moderno') domSuffix = 'OrganizadorModerno';
-            if (key === 'juguete_gato') domSuffix = 'JugueteGato';
-            
-            const imgEl = document.getElementById(`img${domSuffix}`);
-            if (imgEl) {
+        let domSuffix = key.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('');
+        if (key === 'organizador_moderno') domSuffix = 'OrganizadorModerno';
+        if (key === 'juguete_gato') domSuffix = 'JugueteGato';
+        
+        const imgEl = document.getElementById(`img${domSuffix}`);
+        if (imgEl) {
+            if (savedImg) {
                 if (savedImg.startsWith('images/')) {
                     imgEl.src = savedImg + '?t=' + Date.now();
                 } else {
                     imgEl.src = savedImg;
                 }
+            }
+            
+            // Actualizar badge de categoría con el material personalizado
+            const savedTelemetryRaw = localStorage.getItem(`telemetry_${key}`);
+            if (savedTelemetryRaw) {
+                try {
+                    const savedTelemetry = JSON.parse(savedTelemetryRaw);
+                    if (savedTelemetry && savedTelemetry.material) {
+                        const cardEl = imgEl.closest('.product-selection-card');
+                        const badgeEl = cardEl ? cardEl.querySelector('.product-category-badge') : null;
+                        if (badgeEl) {
+                            badgeEl.textContent = `Tecnología ${savedTelemetry.material}`;
+                        }
+                    }
+                } catch(e) {}
             }
         }
     });
@@ -711,15 +749,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 </p>
             `;
             totalPriceDisplay.textContent = "$0 ARS";
-            btnOrder.classList.add('disabled');
-            btnOrder.style.pointerEvents = 'none';
-            btnOrder.style.opacity = '0.5';
+            if (btnOrder) {
+                btnOrder.classList.add('disabled');
+                btnOrder.style.pointerEvents = 'none';
+                btnOrder.style.opacity = '0.5';
+            }
             return;
         }
 
-        btnOrder.classList.remove('disabled');
-        btnOrder.style.pointerEvents = 'auto';
-        btnOrder.style.opacity = '1';
+        if (btnOrder) {
+            btnOrder.classList.remove('disabled');
+            btnOrder.style.pointerEvents = 'auto';
+            btnOrder.style.opacity = '1';
+        }
 
         summaryItemsContainer.innerHTML = activeItemsHtml;
 
@@ -733,14 +775,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         totalPriceDisplay.textContent = formattedTotal;
 
-        // Configurar enlace a WhatsApp
-        const messageText = `¡Hola Gravity 3D! 🚀 Me encantaría realizar el siguiente pedido premium:\n\n` +
-                            whatsappProductLines +
-                            `💳 *Total General:* ${formattedTotal} ARS\n\n` +
-                            `Quedo atento para coordinar el método de pago y el envío. ¡Muchas gracias!`;
+        if (btnOrder) {
+            // Configurar enlace a WhatsApp
+            const messageText = `¡Hola Gravity 3D! 🚀 Me encantaría realizar el siguiente pedido premium:\n\n` +
+                                whatsappProductLines +
+                                `💳 *Total General:* ${formattedTotal} ARS\n\n` +
+                                `Quedo atento para coordinar el método de pago y el envío. ¡Muchas gracias!`;
 
-        const encodedMessage = encodeURIComponent(messageText);
-        btnOrder.href = `https://wa.me/${WHATSAPP_PHONE}?text=${encodedMessage}`;
+            const encodedMessage = encodeURIComponent(messageText);
+            btnOrder.href = `https://wa.me/${WHATSAPP_PHONE}?text=${encodedMessage}`;
+            btnOrder.target = '_blank';
+        }
     }
 
     // Configurar clic en el botón flotante del carrito (smooth-scroll y animación premium)
@@ -1321,28 +1366,34 @@ document.addEventListener('DOMContentLoaded', () => {
         // 1. Recalcular productos de fábrica
         originalKeys.forEach(key => {
             const hardcoded = hardcodedTelemetry[key];
-            if (hardcoded && hardcoded.material === material) {
-                const weight = hardcoded.weight;
-                const hours = hardcoded.hours;
-                const minutes = hardcoded.minutes;
-                const margin = 1.65;
-                const printTimeHours = hours + (minutes / 60);
+            if (hardcoded) {
+                const savedTelemetryRaw = localStorage.getItem(`telemetry_${key}`);
+                const savedTelemetry = savedTelemetryRaw ? JSON.parse(savedTelemetryRaw) : null;
+                const mat = savedTelemetry ? savedTelemetry.material : hardcoded.material;
                 
-                const rawFilamentCost = weight * newPrice * (1 + rates.margen_purga);
-                const rawEnergyCost = printTimeHours * rates.consumo_p1s_kw_h * rates.energia_kwh_ars;
-                const rawAmortCost = printTimeHours * rates.amortizacion_h_ars;
-                const netCost = rawFilamentCost + rawEnergyCost + rawAmortCost;
-                const suggestedPrice = customRound(netCost * margin);
-                
-                localStorage.setItem(`price_${key}`, suggestedPrice);
-                if (products[key]) {
-                    products[key].price = suggestedPrice;
-                }
-                
-                const domId = getFactoryDomId(key);
-                const priceEl = document.getElementById(domId);
-                if (priceEl) {
-                    priceEl.textContent = `$${new Intl.NumberFormat('es-AR').format(getDisplayPrice(suggestedPrice))} ARS`;
+                if (mat === material) {
+                    const weight = savedTelemetry ? savedTelemetry.weight : hardcoded.weight;
+                    const hours = savedTelemetry ? savedTelemetry.hours : hardcoded.hours;
+                    const minutes = savedTelemetry ? savedTelemetry.minutes : hardcoded.minutes;
+                    const margin = savedTelemetry ? savedTelemetry.margin : 1.65;
+                    const printTimeHours = hours + (minutes / 60);
+                    
+                    const rawFilamentCost = weight * newPrice * (1 + rates.margen_purga);
+                    const rawEnergyCost = printTimeHours * rates.consumo_p1s_kw_h * rates.energia_kwh_ars;
+                    const rawAmortCost = printTimeHours * rates.amortizacion_h_ars;
+                    const netCost = rawFilamentCost + rawEnergyCost + rawAmortCost;
+                    const suggestedPrice = customRound(netCost * margin);
+                    
+                    localStorage.setItem(`price_${key}`, suggestedPrice);
+                    if (products[key]) {
+                        products[key].price = suggestedPrice;
+                    }
+                    
+                    const domId = getFactoryDomId(key);
+                    const priceEl = document.getElementById(domId);
+                    if (priceEl) {
+                        priceEl.textContent = `$${new Intl.NumberFormat('es-AR').format(getDisplayPrice(suggestedPrice))} ARS`;
+                    }
                 }
             }
         });
@@ -1481,12 +1532,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         const allFactoryProds = [
-            { key: 'jabonera', name: products.jabonera?.name || "Jabonera de Panal Minimalista", collection: 'Tocador & Baño', material: 'PETG', price: products.jabonera?.price || 4550, photo: 'images/jabonera.png' },
-            { key: 'portarollo', name: products.portarollo?.name || "Smart Toilet Roll Holder", collection: 'Tocador & Baño', material: 'PETG', price: products.portarollo?.price || 7765, photo: 'images/porta rollo papel higienico.gif' },
-            { key: 'organizador', name: products.organizador?.name || "Organizador Compartimentado", collection: 'Oficina & Escritorio', material: 'PETG', price: products.organizador?.price || 13125, photo: 'images/organizador.png' },
-            { key: 'contenedor', name: products.contenedor?.name || "Contenedor Roscado 50mm", collection: 'Oficina & Escritorio', material: 'PETG', price: products.contenedor?.price || 2055, photo: 'images/contenedor_roscado_sin_fondo.png' },
-            { key: 'organizador_moderno', name: products.organizador_moderno?.name || "Organizador de Escritorio Moderno", collection: 'Oficina & Escritorio', material: 'PETG', price: products.organizador_moderno?.price || 13320, photo: 'images/organizador moderno de escritorio.webp' },
-            { key: 'juguete_gato', name: products.juguete_gato?.name || "Juguete Esfera Geodésica \"Geo-Ball\"", collection: 'Mascotas & Recreación', material: 'PETG', price: products.juguete_gato?.price || 2875, photo: 'images/juguete_gato_slicer.png' }
+            { key: 'jabonera', name: products.jabonera?.name || "Jabonera de Panal Minimalista", collection: 'Tocador & Baño', material: getFactoryMaterial('jabonera', 'PETG'), price: products.jabonera?.price || 4550, photo: 'images/jabonera.png' },
+            { key: 'portarollo', name: products.portarollo?.name || "Smart Toilet Roll Holder", collection: 'Tocador & Baño', material: getFactoryMaterial('portarollo', 'PETG'), price: products.portarollo?.price || 7765, photo: 'images/porta rollo papel higienico.gif' },
+            { key: 'organizador', name: products.organizador?.name || "Organizador Compartimentado", collection: 'Oficina & Escritorio', material: getFactoryMaterial('organizador', 'PETG'), price: products.organizador?.price || 13125, photo: 'images/organizador.png' },
+            { key: 'contenedor', name: products.contenedor?.name || "Contenedor Roscado 50mm", collection: 'Oficina & Escritorio', material: getFactoryMaterial('contenedor', 'PETG'), price: products.contenedor?.price || 2055, photo: 'images/contenedor_roscado_sin_fondo.png' },
+            { key: 'organizador_moderno', name: products.organizador_moderno?.name || "Organizador de Escritorio Moderno", collection: 'Oficina & Escritorio', material: getFactoryMaterial('organizador_moderno', 'PETG'), price: products.organizador_moderno?.price || 13320, photo: 'images/organizador moderno de escritorio.webp' },
+            { key: 'juguete_gato', name: products.juguete_gato?.name || "Juguete Esfera Geodésica \"Geo-Ball\"", collection: 'Mascotas & Recreación', material: getFactoryMaterial('juguete_gato', 'PETG'), price: products.juguete_gato?.price || 2875, photo: 'images/juguete_gato_slicer.png' }
         ];
 
         const factoryProds = allFactoryProds.filter(p => !deletedList.includes(p.key));
@@ -1869,6 +1920,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const savedPrice = localStorage.getItem(`price_${productKey}`);
                 const savedDesc = localStorage.getItem(`desc_${productKey}`);
                 const savedImage = localStorage.getItem(`custom_image_${productKey}`);
+                const savedTelemetryRaw = localStorage.getItem(`telemetry_${productKey}`);
+                const savedTelemetry = savedTelemetryRaw ? JSON.parse(savedTelemetryRaw) : null;
                 
                 product = {
                     key: productKey,
@@ -1881,13 +1934,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     photo: savedImage || hardcoded.slicerPhoto,
                     slicerPhoto: hardcoded.slicerPhoto,
                     telemetry: {
-                        weight: hardcoded.weight,
-                        hours: hardcoded.hours,
-                        minutes: hardcoded.minutes,
-                        material: hardcoded.material,
-                        color: hardcoded.defaultColor,
-                        friendlyColor: hardcoded.friendlyColor,
-                        margin: 1.65
+                        weight: savedTelemetry ? savedTelemetry.weight : hardcoded.weight,
+                        hours: savedTelemetry ? savedTelemetry.hours : hardcoded.hours,
+                        minutes: savedTelemetry ? savedTelemetry.minutes : hardcoded.minutes,
+                        material: savedTelemetry ? savedTelemetry.material : hardcoded.material,
+                        color: savedTelemetry ? savedTelemetry.color : hardcoded.defaultColor,
+                        friendlyColor: savedTelemetry ? savedTelemetry.friendlyColor : hardcoded.friendlyColor,
+                        margin: savedTelemetry ? savedTelemetry.margin : 1.65
                     }
                 };
             }
@@ -2188,6 +2241,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (compressedImageBase64) {
                     localStorage.setItem(`custom_image_${uniqueKey}`, photoPath);
                 }
+                localStorage.setItem(`telemetry_${uniqueKey}`, JSON.stringify(newProduct.telemetry));
             } else {
                 // Flujo para productos personalizados dinámicos
                 const customProductsList = getSafeCustomProducts();
@@ -2228,6 +2282,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (descEl) descEl.textContent = newProduct.desc;
                     
                     if (priceEl) priceEl.textContent = `$${new Intl.NumberFormat('es-AR').format(newProduct.price)} ARS`;
+
+                    // Actualizar badge de categoría del producto estático
+                    const cardEl = imgEl ? imgEl.closest('.product-selection-card') : null;
+                    const badgeEl = cardEl ? cardEl.querySelector('.product-category-badge') : null;
+                    if (badgeEl) {
+                        badgeEl.textContent = newProduct.categoryBadge;
+                    }
                 } else {
                     // Actualizar tarjetas de productos dinámicos
                     const existingCard = document.querySelector(`[data-custom-key="${newProduct.key}"]`);
@@ -2540,12 +2601,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             const allFactoryProds = [
-                { key: 'jabonera', name: products.jabonera?.name || "Jabonera de Panal Minimalista", collection: 'Tocador & Baño', material: 'PETG', price: products.jabonera?.price || 4550, origin: 'Fábrica' },
-                { key: 'portarollo', name: products.portarollo?.name || "Smart Toilet Roll Holder", collection: 'Tocador & Baño', material: 'PETG', price: products.portarollo?.price || 7765, origin: 'Fábrica' },
-                { key: 'organizador', name: products.organizador?.name || "Organizador Compartimentado", collection: 'Oficina & Escritorio', material: 'PETG', price: products.organizador?.price || 13125, origin: 'Fábrica' },
-                { key: 'contenedor', name: products.contenedor?.name || "Contenedor Roscado 50mm", collection: 'Oficina & Escritorio', material: 'PETG', price: products.contenedor?.price || 2055, origin: 'Fábrica' },
-                { key: 'organizador_moderno', name: products.organizador_moderno?.name || "Organizador de Escritorio Moderno", collection: 'Oficina & Escritorio', material: 'PETG', price: products.organizador_moderno?.price || 13320, origin: 'Fábrica' },
-                { key: 'juguete_gato', name: products.juguete_gato?.name || "Juguete Esfera Geodésica \"Geo-Ball\"", collection: 'Mascotas & Recreación', material: 'PETG', price: products.juguete_gato?.price || 2875, origin: 'Fábrica' }
+                { key: 'jabonera', name: products.jabonera?.name || "Jabonera de Panal Minimalista", collection: 'Tocador & Baño', material: getFactoryMaterial('jabonera', 'PETG'), price: products.jabonera?.price || 4550, origin: 'Fábrica' },
+                { key: 'portarollo', name: products.portarollo?.name || "Smart Toilet Roll Holder", collection: 'Tocador & Baño', material: getFactoryMaterial('portarollo', 'PETG'), price: products.portarollo?.price || 7765, origin: 'Fábrica' },
+                { key: 'organizador', name: products.organizador?.name || "Organizador Compartimentado", collection: 'Oficina & Escritorio', material: getFactoryMaterial('organizador', 'PETG'), price: products.organizador?.price || 13125, origin: 'Fábrica' },
+                { key: 'contenedor', name: products.contenedor?.name || "Contenedor Roscado 50mm", collection: 'Oficina & Escritorio', material: getFactoryMaterial('contenedor', 'PETG'), price: products.contenedor?.price || 2055, origin: 'Fábrica' },
+                { key: 'organizador_moderno', name: products.organizador_moderno?.name || "Organizador de Escritorio Moderno", collection: 'Oficina & Escritorio', material: getFactoryMaterial('organizador_moderno', 'PETG'), price: products.organizador_moderno?.price || 13320, origin: 'Fábrica' },
+                { key: 'juguete_gato', name: products.juguete_gato?.name || "Juguete Esfera Geodésica \"Geo-Ball\"", collection: 'Mascotas & Recreación', material: getFactoryMaterial('juguete_gato', 'PETG'), price: products.juguete_gato?.price || 2875, origin: 'Fábrica' }
             ];
             
             const factoryProds = allFactoryProds.filter(p => !deletedList.includes(p.key));
@@ -2622,12 +2683,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             const allFactoryProds = [
-                { key: 'jabonera', name: products.jabonera?.name || "Jabonera de Panal Minimalista", collection: 'Tocador & Baño', material: 'PETG', price: products.jabonera?.price || 4550, photo: 'images/jabonera.png', origin: 'Fábrica' },
-                { key: 'portarollo', name: products.portarollo?.name || "Smart Toilet Roll Holder", collection: 'Tocador & Baño', material: 'PETG', price: products.portarollo?.price || 7765, photo: 'images/porta rollo papel higienico.gif', origin: 'Fábrica' },
-                { key: 'organizador', name: products.organizador?.name || "Organizador Compartimentado", collection: 'Oficina & Escritorio', material: 'PETG', price: products.organizador?.price || 13125, photo: 'images/organizador.png', origin: 'Fábrica' },
-                { key: 'contenedor', name: products.contenedor?.name || "Contenedor Roscado 50mm", collection: 'Oficina & Escritorio', material: 'PETG', price: products.contenedor?.price || 2055, photo: 'images/contenedor_roscado_sin_fondo.png', origin: 'Fábrica' },
-                { key: 'organizador_moderno', name: products.organizador_moderno?.name || "Organizador de Escritorio Moderno", collection: 'Oficina & Escritorio', material: 'PETG', price: products.organizador_moderno?.price || 13320, photo: 'images/organizador moderno de escritorio.webp', origin: 'Fábrica' },
-                { key: 'juguete_gato', name: products.juguete_gato?.name || "Juguete Esfera Geodésica \"Geo-Ball\"", collection: 'Mascotas & Recreación', material: 'PETG', price: products.juguete_gato?.price || 2875, photo: 'images/juguete_gato_slicer.png', origin: 'Fábrica' }
+                { key: 'jabonera', name: products.jabonera?.name || "Jabonera de Panal Minimalista", collection: 'Tocador & Baño', material: getFactoryMaterial('jabonera', 'PETG'), price: products.jabonera?.price || 4550, photo: 'images/jabonera.png', origin: 'Fábrica' },
+                { key: 'portarollo', name: products.portarollo?.name || "Smart Toilet Roll Holder", collection: 'Tocador & Baño', material: getFactoryMaterial('portarollo', 'PETG'), price: products.portarollo?.price || 7765, photo: 'images/porta rollo papel higienico.gif', origin: 'Fábrica' },
+                { key: 'organizador', name: products.organizador?.name || "Organizador Compartimentado", collection: 'Oficina & Escritorio', material: getFactoryMaterial('organizador', 'PETG'), price: products.organizador?.price || 13125, photo: 'images/organizador.png', origin: 'Fábrica' },
+                { key: 'contenedor', name: products.contenedor?.name || "Contenedor Roscado 50mm", collection: 'Oficina & Escritorio', material: getFactoryMaterial('contenedor', 'PETG'), price: products.contenedor?.price || 2055, photo: 'images/contenedor_roscado_sin_fondo.png', origin: 'Fábrica' },
+                { key: 'organizador_moderno', name: products.organizador_moderno?.name || "Organizador de Escritorio Moderno", collection: 'Oficina & Escritorio', material: getFactoryMaterial('organizador_moderno', 'PETG'), price: products.organizador_moderno?.price || 13320, photo: 'images/organizador moderno de escritorio.webp', origin: 'Fábrica' },
+                { key: 'juguete_gato', name: products.juguete_gato?.name || "Juguete Esfera Geodésica \"Geo-Ball\"", collection: 'Mascotas & Recreación', material: getFactoryMaterial('juguete_gato', 'PETG'), price: products.juguete_gato?.price || 2875, photo: 'images/juguete_gato_slicer.png', origin: 'Fábrica' }
             ];
             
             const factoryProds = allFactoryProds.filter(p => !deletedList.includes(p.key));
@@ -2915,18 +2976,20 @@ document.addEventListener('DOMContentLoaded', () => {
         // De lo contrario buscar en hardcoded
         const hardcoded = hardcodedTelemetry[key];
         if (hardcoded) {
+            const savedTelemetryRaw = localStorage.getItem(`telemetry_${key}`);
+            const savedTelemetry = savedTelemetryRaw ? JSON.parse(savedTelemetryRaw) : null;
             return {
                 name: products[key] ? products[key].name : hardcoded.name,
-                desc: hardcoded.desc,
+                desc: localStorage.getItem(`desc_${key}`) || hardcoded.desc,
                 categoryBadge: hardcoded.categoryBadge,
-                photo: hardcoded.slicerPhoto,
+                photo: localStorage.getItem(`custom_image_${key}`) || hardcoded.slicerPhoto,
                 slicerPhoto: hardcoded.slicerPhoto,
-                weight: hardcoded.weight,
-                hours: hardcoded.hours,
-                minutes: hardcoded.minutes,
-                material: hardcoded.material,
-                color: hardcoded.defaultColor,
-                margin: 1.65
+                weight: savedTelemetry ? savedTelemetry.weight : hardcoded.weight,
+                hours: savedTelemetry ? savedTelemetry.hours : hardcoded.hours,
+                minutes: savedTelemetry ? savedTelemetry.minutes : hardcoded.minutes,
+                material: savedTelemetry ? savedTelemetry.material : hardcoded.material,
+                color: savedTelemetry ? savedTelemetry.color : hardcoded.defaultColor,
+                margin: savedTelemetry ? savedTelemetry.margin : 1.65
             };
         }
         return null;
@@ -3481,168 +3544,4 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     setupMobileMenu();
-
-    // ==========================================================================
-    // GOOGLE DRIVE CUSTOMER FOLDER AUTOMATION
-    // ==========================================================================
-    // IMPORTANTE: Reemplaza esta URL con la que te proporcione Google Sheets
-    // al publicar el script como Aplicación Web.
-    const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbznXvRztkytd3oqLCDMJD8HOIL24PDikY_INK3tM1OEqs4YwQcNRUWdfW1hVrRXDmk9/exec';
-
-    const customerDataModal = document.getElementById('customerDataModal');
-    const closeCustomerDataBtn = document.getElementById('closeCustomerDataBtn');
-    const submitCustomerOrderBtn = document.getElementById('submitCustomerOrderBtn');
-    const customerNameInput = document.getElementById('customerNameInput');
-    const customerNameError = document.getElementById('customerNameError');
-    const loaderCustomerModal = document.getElementById('loaderCustomerModal');
-
-    console.log("DEBUG GRAVITY 3D:", {
-        btnOrder: btnOrder,
-        customerDataModal: customerDataModal,
-        closeCustomerDataBtn: closeCustomerDataBtn,
-        submitCustomerOrderBtn: submitCustomerOrderBtn
-    });
-
-    // Interceptar el clic original del botón de WhatsApp usando delegación de eventos
-    document.addEventListener('click', function(e) {
-        const target = e.target.closest('#btnOrder');
-        if (target) {
-            e.preventDefault(); // Detener redirección automática directa
-            e.stopPropagation(); // Detener propagación
-            
-            console.log("Clic de confirmación interceptado vía delegación.");
-            
-            if (customerDataModal) {
-                // Limpiar estados previos
-                customerNameInput.value = '';
-                customerNameError.style.display = 'none';
-                if (loaderCustomerModal) loaderCustomerModal.style.display = 'none';
-                submitCustomerOrderBtn.disabled = false;
-                
-                // Abrir modal de datos
-                customerDataModal.style.display = 'flex';
-                customerNameInput.focus();
-            }
-        }
-    });
-
-    if (btnOrder && customerDataModal) {
-
-        // Cerrar modal al hacer clic en la "X"
-        if (closeCustomerDataBtn) {
-            closeCustomerDataBtn.addEventListener('click', function() {
-                customerDataModal.style.display = 'none';
-            });
-        }
-
-        // Cerrar modal al hacer clic fuera del contenedor
-        customerDataModal.addEventListener('click', function(e) {
-            if (e.target === customerDataModal) {
-                customerDataModal.style.display = 'none';
-            }
-        });
-
-        // Procesar pedido y continuar
-        submitCustomerOrderBtn.addEventListener('click', async function() {
-            const clienteNombre = customerNameInput.value.trim();
-
-            if (!clienteNombre) {
-                customerNameError.style.display = 'block';
-                return;
-            }
-
-            customerNameError.style.display = 'none';
-            submitCustomerOrderBtn.disabled = true;
-            if (loaderCustomerModal) loaderCustomerModal.style.display = 'flex';
-
-            // Recopilar datos del carrito
-            const productosComprados = [];
-            let totalPedido = 0;
-
-            for (const [key, prod] of Object.entries(products)) {
-                if (prod.active && prod.qty > 0) {
-                    const displayPrice = getDisplayPrice(prod.price);
-                    const subtotal = customRound(displayPrice * prod.qty);
-                    totalPedido += subtotal;
-                    productosComprados.push({
-                        nombre: prod.name,
-                        color: prod.friendlyColor || 'N/A',
-                        cantidad: prod.qty,
-                        subtotal: subtotal
-                    });
-                }
-            }
-
-            // Función auxiliar para continuar a WhatsApp
-            const continuarAWhatsApp = () => {
-                let messageText = `¡Hola Gravity 3D! 🚀 Mi nombre es *${clienteNombre}* y me encantaría realizar el siguiente pedido premium:\n\n`;
-                let whatsappProductLines = '';
-
-                productosComprados.forEach(prod => {
-                    const formattedSub = new Intl.NumberFormat('es-AR', {
-                        style: 'currency',
-                        currency: 'ARS',
-                        minimumFractionDigits: 0,
-                        maximumFractionDigits: 0
-                    }).format(prod.subtotal);
-
-                    whatsappProductLines += `📦 *${prod.nombre}*\n` +
-                                            `   🎨 Color: ${prod.color}\n` +
-                                            `   🔢 Cantidad: ${prod.cantidad} unidad(es)\n` +
-                                            `   💵 Subtotal: ${formattedSub}\n\n`;
-                });
-
-                const formattedTotal = new Intl.NumberFormat('es-AR', {
-                    style: 'currency',
-                    currency: 'ARS',
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: 0
-                }).format(totalPedido);
-
-                messageText += whatsappProductLines +
-                               `💳 *Total General:* ${formattedTotal} ARS\n\n` +
-                               `Quedo atento para coordinar el método de pago y el envío. ¡Muchas gracias!`;
-
-                const encodedMessage = encodeURIComponent(messageText);
-                const whatsappUrl = `https://wa.me/${WHATSAPP_PHONE}?text=${encodedMessage}`;
-                
-                // Abrir en pestaña nueva y ocultar el loader/modal
-                window.open(whatsappUrl, '_blank');
-                customerDataModal.style.display = 'none';
-            };
-
-            // Si no se configuró una URL de Apps Script todavía, saltar directamente a WhatsApp
-            if (!GOOGLE_APPS_SCRIPT_URL || GOOGLE_APPS_SCRIPT_URL === 'URL_DE_TU_WEB_APP') {
-                continuarAWhatsApp();
-                return;
-            }
-
-            // Enviar petición en segundo plano de forma resiliente
-            try {
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 6000); // 6 segundos de tiempo límite
-
-                await fetch(GOOGLE_APPS_SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors', // Evita conflictos de preflight CORS en el navegador
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        cliente: clienteNombre,
-                        productos: productosComprados,
-                        total: totalPedido
-                    }),
-                    signal: controller.signal
-                });
-
-                clearTimeout(timeoutId);
-            } catch (err) {
-                console.warn("No se pudo automatizar la creación de la carpeta de Drive (modo resiliente):", err);
-            } finally {
-                // Redirigir siempre al cliente, pase lo que pase
-                continuarAWhatsApp();
-            }
-        });
-    }
 });

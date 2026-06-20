@@ -736,9 +736,7 @@
                             <p class="payment-note">*Cotizado en Pesos Argentinos. Pago por transferencia bancaria o Mercado Pago.</p>
                         </div>
 
-                        <a href="#" class="btn btn-primary btn-block btn-lg" id="btnOrder">
-                            <i class="fa-brands fa-whatsapp"></i> Confirmar Pedido en WhatsApp
-                        </a>
+                        
                     </div>
                 </div>
             </div>
@@ -772,39 +770,6 @@
             <p>&copy; 2026 GRAVITY 3D Studio. Todos los derechos reservados. Envíos a todo el país. <i class="fa-solid fa-key" id="adminKeyIcon" style="cursor: pointer; opacity: 0.2; font-size: 0.8rem; margin-left: 8px;" title="Modo Administrador"></i> | <span id="emergencyResetBtn" style="cursor: pointer; opacity: 0.3; font-size: 0.8rem; text-decoration: underline; color: var(--text-muted);" title="Restablecer base de datos y limpiar caché de emergencia">Restablecer Datos</span></p>
         </div>
     </footer>
-
-    <!-- Customer Data Modal -->
-    <div id="customerDataModal" class="telemetry-modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 8, 15, 0.85); backdrop-filter: blur(12px); z-index: 2000; align-items: center; justify-content: center; padding: 24px;">
-        <div class="telemetry-modal-container glassmorphism highlighted-card" style="width: 100%; max-width: 450px; padding: 36px; position: relative; border-color: rgba(255,255,255,0.1); border-radius: 28px; display: flex; flex-direction: column; gap: 20px; text-align: center; background: var(--bg-card);">
-            <!-- Close Button -->
-            <button id="closeCustomerDataBtn" style="position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; color: white; cursor: pointer; font-size: 1rem; transition: var(--transition);">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-            
-            <div style="font-size: 2.5rem; color: var(--primary); margin-bottom: 8px;">
-                <i class="fa-solid fa-folder-plus"></i>
-            </div>
-            
-            <h3 style="font-size: 1.6rem; color: white; margin: 0; font-family: var(--font-heading);">Preparar tu Carpeta de Pedido</h3>
-            <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; margin: 0;">
-                Ingresa tu nombre para generar tu espacio en la nube y vincular tu orden.
-            </p>
-            
-            <div style="text-align: left; display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
-                <label for="customerNameInput" style="color: white; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Nombre y Apellido:</label>
-                <input type="text" id="customerNameInput" placeholder="Ej. Juan Pérez" style="width: 100%; padding: 14px 18px; border-radius: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: white; font-family: inherit; font-size: 1rem; outline: none; transition: var(--transition);">
-                <span id="customerNameError" style="color: #ef4444; font-size: 0.8rem; display: none;"><i class="fa-solid fa-circle-exclamation"></i> Por favor, ingresa tu nombre para continuar.</span>
-            </div>
-            
-            <button id="submitCustomerOrderBtn" class="btn btn-primary btn-block btn-lg" style="margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 10px;">
-                <span>Confirmar y Abrir WhatsApp</span> <i class="fa-solid fa-chevron-right"></i>
-            </button>
-            
-            <div id="loaderCustomerModal" style="display: none; align-items: center; justify-content: center; gap: 12px; margin-top: 10px; color: var(--text-muted); font-size: 0.9rem;">
-                <i class="fa-solid fa-circle-notch fa-spin" style="color: var(--primary);"></i> Creando carpeta del cliente en Drive...
-            </div>
-        </div>
-    </div>
 
     <!-- Slicer Telemetry Modal -->
     <div id="telemetryModal" class="telemetry-modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 8, 15, 0.85); backdrop-filter: blur(12px); z-index: 2000; align-items: center; justify-content: center; padding: 24px;">
@@ -925,6 +890,6 @@
     </a>
 
     <!-- Mobile Nav Script & App Logic -->
-    <script src="app.js?v=1.0.1"></script>
+    <script src="app.js?v=1.1.0"></script>
 </body>
 </html>

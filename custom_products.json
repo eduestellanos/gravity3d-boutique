@@ -3,7 +3,7 @@
     "key": "custom_1780011126365",
     "name": "Especiero de Pared",
     "desc": "Sencillo estante para especias para una mejor organización de la cocina. Cada sección alberga dos frascos de especias y se puede montar en la pared con 2 tornillos para paneles de yeso #4. (98*125*50)",
-    "price": 2495,
+    "price": 2780,
     "collectionId": "cocina-hogar",
     "collectionName": "Cocina & Hogar",
     "categoryBadge": "Tecnología PETG",
@@ -17,17 +17,17 @@
       "color": "S/C",
       "friendlyColor": "S/C",
       "margin": 1.6,
-      "filamentCost": 999.6,
+      "filamentCost": 1176,
       "energyCost": 40.040000000000006,
       "amortCost": 520,
-      "netCost": 1559.64
+      "netCost": 1736.04
     }
   },
   {
     "key": "custom_1780057581968",
     "name": "Embudo N°1",
     "desc": "Presentamos el embudo impreso en 3D con canales de velocidad, una herramienta revolucionaria diseñada para mejorar la eficiencia de vertido. Este innovador embudo cuenta con canales de velocidad especialmente diseñados en la base, lo que garantiza un flujo de aire óptimo y un vertido más suave y rápido. Es perfecto para una variedad de usos, desde fluidos automotrices hasta ingredientes de cocina.\n156*132*160\n",
-    "price": 3400,
+    "price": 3685,
     "collectionId": "tocador-baño",
     "collectionName": "",
     "categoryBadge": "Tecnología PETG",
@@ -41,17 +41,17 @@
       "color": "S/C",
       "friendlyColor": "S/C",
       "margin": 1.65,
-      "filamentCost": 1549.8,
+      "filamentCost": 1722,
       "energyCost": 36.44666666666667,
       "amortCost": 473.3333333333333,
-      "netCost": 2059.58
+      "netCost": 2231.78
     }
   },
   {
     "key": "custom_1780058301711",
     "name": "Embudo N° 2",
     "desc": "Presentamos el embudo impreso en 3D con canales de velocidad, una herramienta revolucionaria diseñada para mejorar la eficiencia de vertido. Este innovador embudo cuenta con canales de velocidad especialmente diseñados en la base, lo que garantiza un flujo de aire óptimo y un vertido más suave y rápido. Es perfecto para una variedad de usos, desde fluidos automotrices hasta ingredientes de cocina.\n117*100*120",
-    "price": 1565,
+    "price": 1680,
     "collectionId": "tocador-baño",
     "collectionName": "",
     "categoryBadge": "Tecnología PETG",
@@ -65,17 +65,17 @@
       "color": "S/C",
       "friendlyColor": "S/C",
       "margin": 1.65,
-      "filamentCost": 623.7,
+      "filamentCost": 693,
       "energyCost": 23.1,
       "amortCost": 300,
-      "netCost": 946.8000000000001
+      "netCost": 1016.1
     }
   },
   {
     "key": "custom_1780246529385",
     "name": "Juego de Soporte para Cepillo de Dientes",
     "desc": " Un porta vasos con 3 vasos, para tres cepillos de dientes.",
-    "price": 5930,
+    "price": 6470,
     "collectionId": "tocador-baño",
     "collectionName": "Tocador & Baño",
     "categoryBadge": "Tecnología PETG",
@@ -89,17 +89,17 @@
       "color": "S/C",
       "friendlyColor": "S/C",
       "margin": 1.65,
-      "filamentCost": 2967.3,
+      "filamentCost": 3297,
       "energyCost": 44.660000000000004,
       "amortCost": 580,
-      "netCost": 3591.96
+      "netCost": 3921.66
     }
   },
   {
     "key": "custom_1780357821438",
     "name": "Organizador de mesita de noche",
     "desc": "Organizador de mesita de noche  200*177*122 ",
-    "price": 9015,
+    "price": 9770,
     "collectionId": "oficina-escritorio",
     "collectionName": "Oficina & Escritorio",
     "categoryBadge": "Tecnología PETG",
@@ -113,10 +113,10 @@
       "color": "blanco",
       "friendlyColor": "blanco",
       "margin": 1.6,
-      "filamentCost": 4233.6,
+      "filamentCost": 4704,
       "energyCost": 100.10000000000002,
       "amortCost": 1300,
-      "netCost": 5633.700000000001
+      "netCost": 6104.1
     }
   }
 ]
