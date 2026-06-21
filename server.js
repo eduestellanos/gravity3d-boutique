@@ -20,7 +20,11 @@ const MIME_TYPES = {
     '.woff': 'font/woff',
     '.woff2': 'font/woff2',
     '.ttf': 'font/ttf',
-    '.eot': 'application/vnd.ms-fontobject'
+    '.eot': 'application/vnd.ms-fontobject',
+    '.mp4': 'video/mp4',
+    '.webm': 'video/webm',
+    '.ogv': 'video/ogg',
+    '.mov': 'video/quicktime'
 };
 
 const server = http.createServer((req, res) => {
@@ -188,6 +192,10 @@ const server = http.createServer((req, res) => {
                     if (mimeType === 'image/png') ext = '.png';
                     else if (mimeType === 'image/gif') ext = '.gif';
                     else if (mimeType === 'image/webp') ext = '.webp';
+                    else if (mimeType === 'video/mp4') ext = '.mp4';
+                    else if (mimeType === 'video/webm') ext = '.webm';
+                    else if (mimeType === 'video/ogg') ext = '.ogv';
+                    else if (mimeType === 'video/quicktime') ext = '.mov';
 
                     // Sanitizar la clave para evitar path traversal en la escritura
                     const safeKey = key.replace(/[^a-zA-Z0-9_-]/g, '');

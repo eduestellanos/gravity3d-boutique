@@ -3,6 +3,161 @@
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
+    function isVideoData(data) {
+        if (!data) return false;
+        return data.startsWith('data:video/') || data.includes('.mp4') || data.includes('.webm') || data.includes('.ogv') || data.includes('.mov');
+    }
+
+    function renderProductMedia(photo, alt, id, inlineStyle = '', className = 'catalog-thumb') {
+        if (!photo) return `<img src="images/jabonera.png" alt="${alt}" class="${className}" id="${id || ''}" style="${inlineStyle}">`;
+        const isVideo = isVideoData(photo);
+        if (isVideo) {
+            return `<video src="${photo}" class="${className}" id="${id || ''}" style="object-fit: cover; ${inlineStyle}" autoplay loop muted playsinline></video>`;
+        }
+        const src = photo.startsWith('images/') ? photo + '?t=' + Date.now() : photo;
+        return `<img src="${src}" alt="${alt}" class="${className}" id="${id || ''}" style="${inlineStyle}">`;
+    }
+
+    function setupAdminMediaListeners(el, key) {
+        if (!isAdmin) return;
+        el.style.cursor = 'pointer';
+        el.title = '🔓 Modo Admin: Hacé clic para cambiar la imagen/video del producto';
+        
+        el.addEventListener('mouseenter', () => {
+            el.style.filter = 'brightness(0.7) contrast(1.1)';
+            el.style.transform = 'scale(1.03)';
+            el.style.boxShadow = '0 0 15px var(--primary-glow)';
+        });
+        el.addEventListener('mouseleave', () => {
+            el.style.filter = '';
+            el.style.transform = '';
+            el.style.boxShadow = '';
+        });
+        
+        el.addEventListener('click', () => {
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'image/*,video/*';
+            
+            fileInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    let mime = file.type || '';
+                    const ext = file.name ? file.name.substring(file.name.lastIndexOf('.')).toLowerCase() : '';
+                    if (!mime && ext) {
+                        if (['.jpg', '.jpeg', '.jpe'].includes(ext)) mime = 'image/jpeg';
+                        else if (ext === '.png') mime = 'image/png';
+                        else if (ext === '.gif') mime = 'image/gif';
+                        else if (ext === '.webp') mime = 'image/webp';
+                        else if (ext === '.svg') mime = 'image/svg+xml';
+                        else if (ext === '.mp4') mime = 'video/mp4';
+                        else if (ext === '.webm') mime = 'video/webm';
+                        else if (ext === '.ogv') mime = 'video/ogg';
+                        else if (ext === '.mov') mime = 'video/quicktime';
+                    }
+
+                    if (!mime.startsWith('image/') && !mime.startsWith('video/')) {
+                        alert("⚠️ Formato de archivo no soportado.");
+                        return;
+                    }
+
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const isVideoOrGif = mime.startsWith('video/') || mime === 'image/gif';
+                        let rawBase64 = event.target.result;
+                        if (rawBase64.startsWith('data:application/octet-stream;')) {
+                            rawBase64 = rawBase64.replace('data:application/octet-stream;', `data:${mime};`);
+                        }
+                        
+                        const handleResult = (base64OrUrl) => {
+                            const newIsVideo = isVideoData(base64OrUrl);
+                            let replacement;
+                            if (newIsVideo) {
+                                replacement = document.createElement('video');
+                                replacement.autoplay = true;
+                                replacement.loop = true;
+                                replacement.muted = true;
+                                replacement.playsInline = true;
+                                replacement.style.objectFit = 'cover';
+                            } else {
+                                replacement = document.createElement('img');
+                                replacement.alt = el.alt || '';
+                            }
+                            replacement.src = base64OrUrl;
+                            replacement.className = el.className;
+                            replacement.id = el.id;
+                            replacement.style.cssText = el.style.cssText;
+                            
+                            el.parentNode.replaceChild(replacement, el);
+                            
+                            setupAdminMediaListeners(replacement, key);
+                            
+                            if (key.startsWith('custom_')) {
+                                const customProds = getSafeCustomProducts();
+                                const prodIndex = customProds.findIndex(p => p.key === key);
+                                if (prodIndex !== -1) {
+                                    customProds[prodIndex].photo = base64OrUrl;
+                                    customProds[prodIndex].slicerPhoto = base64OrUrl;
+                                    localStorage.setItem('custom_products', JSON.stringify(customProds));
+                                }
+                            } else {
+                                localStorage.setItem(`custom_image_${key}`, base64OrUrl);
+                            }
+                            
+                            persistDataToServer(true);
+                            alert("✨ ¡Imagen/video del producto actualizada y persistida con éxito!");
+                        };
+
+                        if (isVideoOrGif) {
+                            if (serverAvailable) {
+                                uploadImageToServer(key, rawBase64).then(uploadedUrl => {
+                                    handleResult(uploadedUrl || rawBase64);
+                                });
+                            } else {
+                                handleResult(rawBase64);
+                            }
+                        } else {
+                            const tempImg = new Image();
+                            tempImg.onload = function() {
+                                const canvas = document.createElement('canvas');
+                                const maxDim = 320;
+                                let width = tempImg.width;
+                                let height = tempImg.height;
+                                if (width > height) {
+                                    if (width > maxDim) {
+                                        height = Math.round((height * maxDim) / width);
+                                        width = maxDim;
+                                    }
+                                } else {
+                                    if (height > maxDim) {
+                                        width = Math.round((width * maxDim) / height);
+                                        height = maxDim;
+                                    }
+                                }
+                                canvas.width = width;
+                                canvas.height = height;
+                                const ctx = canvas.getContext('2d');
+                                ctx.drawImage(tempImg, 0, 0, width, height);
+                                const compressedBase64 = canvas.toDataURL('image/jpeg', 0.5);
+                                
+                                if (serverAvailable) {
+                                    uploadImageToServer(key, compressedBase64).then(uploadedUrl => {
+                                        handleResult(uploadedUrl || compressedBase64);
+                                    });
+                                } else {
+                                    handleResult(compressedBase64);
+                                }
+                            };
+                            tempImg.src = event.target.result;
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            fileInput.click();
+        });
+    }
+
     // --- INTEGRACIÓN DE PERSISTENCIA EN DISCO Y API DE SERVIDOR NODE.JS ---
     let serverAvailable = false;
     try {
@@ -316,18 +471,18 @@ document.addEventListener('DOMContentLoaded', () => {
             let modified = false;
             parsed = parsed.map(prod => {
                 let updatedProd = { ...prod };
-                // Solo purga si el Base64 supera los 100KB de longitud para evitar saturar el almacenamiento
-                if (updatedProd.photo && updatedProd.photo.startsWith('data:') && updatedProd.photo.length > 100000) {
+                // Solo purga si el Base64 supera los 2MB de longitud para evitar saturar el almacenamiento
+                if (updatedProd.photo && updatedProd.photo.startsWith('data:') && updatedProd.photo.length > 2000000) {
                     console.log("🧼 Limpiando imagen base64 pesada heredada:", updatedProd.name);
                     updatedProd.photo = 'images/jabonera.png'; // Fallback liviano
                     modified = true;
                 }
-                if (updatedProd.slicerPhoto && updatedProd.slicerPhoto.startsWith('data:') && updatedProd.slicerPhoto.length > 100000) {
+                if (updatedProd.slicerPhoto && updatedProd.slicerPhoto.startsWith('data:') && updatedProd.slicerPhoto.length > 2000000) {
                     updatedProd.slicerPhoto = 'images/jabonera.png';
                     modified = true;
                 }
                 if (updatedProd.telemetry) {
-                    if (updatedProd.telemetry.slicerPhoto && updatedProd.telemetry.slicerPhoto.startsWith('data:') && updatedProd.telemetry.slicerPhoto.length > 100000) {
+                    if (updatedProd.telemetry.slicerPhoto && updatedProd.telemetry.slicerPhoto.startsWith('data:') && updatedProd.telemetry.slicerPhoto.length > 2000000) {
                         updatedProd.telemetry.slicerPhoto = 'images/jabonera.png';
                         modified = true;
                     }
@@ -448,7 +603,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <span class="product-category-badge">${prod.categoryBadge}</span>
                     <div class="product-card-header">
                         <div class="product-main-visual">
-                            <img src="${prod.photo && prod.photo.startsWith('images/') ? prod.photo + '?t=' + Date.now() : prod.photo}" alt="${prod.name}" class="catalog-thumb" id="img_${prod.key}">
+                            ${renderProductMedia(prod.photo, prod.name, `img_${prod.key}`)}
                         </div>
                         <div class="product-main-details">
                             <h3>${prod.name} ${isAdmin ? `<i class="fa-solid fa-pen-to-square btn-edit-product-trigger" data-product-key="${prod.key}" style="cursor: pointer; margin-left: 8px; font-size: 0.95rem; color: var(--primary); transition: var(--transition);" title="Editar telemetría y detalles del producto"></i>` : ''}</h3>
@@ -510,13 +665,27 @@ document.addEventListener('DOMContentLoaded', () => {
         if (key === 'organizador_moderno') domSuffix = 'OrganizadorModerno';
         if (key === 'juguete_gato') domSuffix = 'JugueteGato';
         
-        const imgEl = document.getElementById(`img${domSuffix}`);
+        let imgEl = document.getElementById(`img${domSuffix}`);
         if (imgEl) {
             if (savedImg) {
-                if (savedImg.startsWith('images/')) {
-                    imgEl.src = savedImg + '?t=' + Date.now();
+                if (isVideoData(savedImg)) {
+                    const videoEl = document.createElement('video');
+                    videoEl.src = savedImg;
+                    videoEl.className = imgEl.className;
+                    videoEl.id = imgEl.id;
+                    videoEl.autoplay = true;
+                    videoEl.loop = true;
+                    videoEl.muted = true;
+                    videoEl.playsInline = true;
+                    videoEl.style.objectFit = 'cover';
+                    imgEl.parentNode.replaceChild(videoEl, imgEl);
+                    imgEl = videoEl;
                 } else {
-                    imgEl.src = savedImg;
+                    if (savedImg.startsWith('images/')) {
+                        imgEl.src = savedImg + '?t=' + Date.now();
+                    } else {
+                        imgEl.src = savedImg;
+                    }
                 }
             }
             
@@ -1571,7 +1740,7 @@ document.addEventListener('DOMContentLoaded', () => {
             rowsHtml += `
                 <tr style="border-bottom: 1px solid rgba(255,255,255,0.04); transition: var(--transition);" class="admin-table-row">
                     <td style="padding: 8px 8px;">
-                        <img src="${prod.photo}" style="width: 38px; height: 38px; border-radius: 6px; object-fit: cover; border: 1px solid var(--glass-border);">
+                        ${renderProductMedia(prod.photo, prod.name, '', 'width: 38px; height: 38px; border-radius: 6px; object-fit: cover; border: 1px solid var(--glass-border);')}
                     </td>
                     <td style="padding: 8px 8px; color: white; font-weight: 500;">${prod.name}</td>
                     <td style="padding: 8px 8px;">${prod.collection}</td>
@@ -1866,8 +2035,16 @@ document.addEventListener('DOMContentLoaded', () => {
         compressedImageBase64 = '';
         const uploadPreviewContainer = document.getElementById('uploadPreviewContainer');
         const uploadPreviewImg = document.getElementById('uploadPreviewImg');
+        const uploadPreviewVideo = document.getElementById('uploadPreviewVideo');
         if (uploadPreviewContainer) uploadPreviewContainer.style.display = 'none';
-        if (uploadPreviewImg) uploadPreviewImg.src = '';
+        if (uploadPreviewImg) {
+            uploadPreviewImg.src = '';
+            uploadPreviewImg.style.display = 'none';
+        }
+        if (uploadPreviewVideo) {
+            uploadPreviewVideo.src = '';
+            uploadPreviewVideo.style.display = 'none';
+        }
         
         const newCollectionNameGroup = document.getElementById('newCollectionNameGroup');
         if (newCollectionNameGroup) newCollectionNameGroup.style.display = 'none';
@@ -2003,8 +2180,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     compressedImageBase64 = product.photo;
                     const uploadPreviewContainer = document.getElementById('uploadPreviewContainer');
                     const uploadPreviewImg = document.getElementById('uploadPreviewImg');
-                    if (uploadPreviewContainer && uploadPreviewImg) {
-                        uploadPreviewImg.src = product.photo;
+                    const uploadPreviewVideo = document.getElementById('uploadPreviewVideo');
+                    if (uploadPreviewContainer) {
+                        const isVideo = isVideoData(product.photo);
+                        if (isVideo) {
+                            if (uploadPreviewImg) uploadPreviewImg.style.display = 'none';
+                            if (uploadPreviewVideo) {
+                                uploadPreviewVideo.src = product.photo;
+                                uploadPreviewVideo.style.display = 'block';
+                            }
+                        } else {
+                            if (uploadPreviewVideo) uploadPreviewVideo.style.display = 'none';
+                            if (uploadPreviewImg) {
+                                uploadPreviewImg.src = product.photo;
+                                uploadPreviewImg.style.display = 'block';
+                            }
+                        }
                         uploadPreviewContainer.style.display = 'flex';
                     }
                 } else {
@@ -2455,69 +2646,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     const newImgEl = document.getElementById(`img_${newProduct.key}`);
                     if (newImgEl) {
-                        newImgEl.addEventListener('mouseenter', () => {
-                            if (isAdmin) newImgEl.style.filter = 'brightness(0.5)';
-                        });
-                        newImgEl.addEventListener('mouseleave', () => {
-                            if (isAdmin) newImgEl.style.filter = 'none';
-                        });
-                        
-                        newImgEl.addEventListener('click', () => {
-                            if (!isAdmin) return;
-                            const fileInput = document.createElement('input');
-                            fileInput.type = 'file';
-                            fileInput.accept = 'image/*';
-                            fileInput.addEventListener('change', (e) => {
-                                const file = e.target.files[0];
-                                if (file) {
-                                    const reader = new FileReader();
-                                    reader.onload = function(event) {
-                                        const tempImg = new Image();
-                                        tempImg.onload = function() {
-                                            const canvas = document.createElement('canvas');
-                                            const maxDim = 320;
-                                            let width = tempImg.width;
-                                            let height = tempImg.height;
-                                            if (width > height) {
-                                                if (width > maxDim) {
-                                                    height = Math.round((height * maxDim) / width);
-                                                    width = maxDim;
-                                                }
-                                            } else {
-                                                if (height > maxDim) {
-                                                    width = Math.round((width * maxDim) / height);
-                                                    height = maxDim;
-                                                }
-                                            }
-                                            canvas.width = width;
-                                            canvas.height = height;
-                                            const ctx = canvas.getContext('2d');
-                                            ctx.drawImage(tempImg, 0, 0, width, height);
-                                            const compressedBase64 = canvas.toDataURL('image/jpeg', 0.5);
-                                            newImgEl.src = compressedBase64;
-                                            
-                                            if (serverAvailable) {
-                                                uploadImageToServer(newProduct.key, compressedBase64).then(uploadedUrl => {
-                                                    const finalUrl = uploadedUrl || compressedBase64;
-                                                    const customProds = getSafeCustomProducts();
-                                                    const prodIndex = customProds.findIndex(p => p.key === newProduct.key);
-                                                    if (prodIndex !== -1) {
-                                                        customProds[prodIndex].photo = finalUrl;
-                                                        customProds[prodIndex].slicerPhoto = finalUrl;
-                                                        localStorage.setItem('custom_products', JSON.stringify(customProds));
-                                                    }
-                                                    persistDataToServer(true);
-                                                    alert("✨ ¡Imagen del producto actualizada y persistida con éxito en el catálogo!");
-                                                });
-                                            }
-                                        };
-                                        tempImg.src = event.target.result;
-                                    };
-                                    reader.readAsDataURL(file);
-                                }
-                            });
-                            fileInput.click();
-                        });
+                        setupAdminMediaListeners(newImgEl, newProduct.key);
                     }
                 }
                 
@@ -2529,8 +2658,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 compressedImageBase64 = '';
                 const uploadPreviewContainer = document.getElementById('uploadPreviewContainer');
                 const uploadPreviewImg = document.getElementById('uploadPreviewImg');
+                const uploadPreviewVideo = document.getElementById('uploadPreviewVideo');
                 if (uploadPreviewContainer) uploadPreviewContainer.style.display = 'none';
-                if (uploadPreviewImg) uploadPreviewImg.src = '';
+                if (uploadPreviewImg) {
+                    uploadPreviewImg.src = '';
+                    uploadPreviewImg.style.display = 'none';
+                }
+                if (uploadPreviewVideo) {
+                    uploadPreviewVideo.src = '';
+                    uploadPreviewVideo.style.display = 'none';
+                }
                 
                 const newCollectionNameGroup = document.getElementById('newCollectionNameGroup');
                 if (newCollectionNameGroup) newCollectionNameGroup.style.display = 'none';
@@ -2725,7 +2862,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 rowsHtml += `
                     <tr style="border-bottom: 1px solid #444;">
                         <td style="padding: 12px; text-align: center;">
-                            <img src="${prod.photo}" style="width: 55px; height: 55px; border-radius: 8px; object-fit: cover; border: 1px solid #444;" onerror="this.src='https://via.placeholder.com/55?text=3D';">
+                            ${renderProductMedia(prod.photo, prod.name, '', 'width: 55px; height: 55px; border-radius: 8px; object-fit: cover; border: 1px solid #444;')}
                         </td>
                         <td style="padding: 12px; font-weight: bold; color: #fff;">${prod.name}${statusBadge}</td>
                         <td style="padding: 12px; color: #ccc;">${prod.collection}</td>
@@ -3028,23 +3165,47 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('telemetryProdTitle').textContent = data.name;
         document.getElementById('telemetryProdDesc').textContent = data.desc;
         document.getElementById('telemetryProdBadge').textContent = `${data.material} Premium - ${data.color}`;
-        const slicerImg = document.getElementById('telemetrySlicerImg');
+        let slicerImg = document.getElementById('telemetrySlicerImg');
         if (slicerImg) {
-            slicerImg.src = data.slicerPhoto || 'images/jabonera.png';
-            slicerImg.onerror = () => {
-                const currentSrc = slicerImg.src.toLowerCase();
-                if (currentSrc.endsWith('.png')) {
-                    // Si falla el PNG, probamos dinámicamente con JPG
-                    slicerImg.src = data.slicerPhoto.replace('.png', '.jpg');
-                } else if (currentSrc.endsWith('.jpg')) {
-                    // Si falla el JPG, probamos con WEBP
-                    slicerImg.src = data.slicerPhoto.replace('.jpg', '.webp');
-                } else {
-                    // Fallback definitivo al render del producto o imagen base
-                    slicerImg.src = data.photo || 'images/jabonera.png';
-                    slicerImg.onerror = null;
+            const photoSrc = data.slicerPhoto || data.photo || 'images/jabonera.png';
+            const isVideo = isVideoData(photoSrc);
+            
+            if (isVideo) {
+                if (slicerImg.tagName.toLowerCase() !== 'video') {
+                    const videoEl = document.createElement('video');
+                    videoEl.id = 'telemetrySlicerImg';
+                    videoEl.autoplay = true;
+                    videoEl.loop = true;
+                    videoEl.muted = true;
+                    videoEl.playsInline = true;
+                    videoEl.style.cssText = slicerImg.style.cssText;
+                    slicerImg.parentNode.replaceChild(videoEl, slicerImg);
+                    slicerImg = videoEl;
                 }
-            };
+                slicerImg.src = photoSrc;
+                slicerImg.onerror = null;
+            } else {
+                if (slicerImg.tagName.toLowerCase() !== 'img') {
+                    const imgEl = document.createElement('img');
+                    imgEl.id = 'telemetrySlicerImg';
+                    imgEl.alt = 'Previsualización de Laminado';
+                    imgEl.style.cssText = slicerImg.style.cssText;
+                    slicerImg.parentNode.replaceChild(imgEl, slicerImg);
+                    slicerImg = imgEl;
+                }
+                slicerImg.src = photoSrc;
+                slicerImg.onerror = () => {
+                    const currentSrc = slicerImg.src.toLowerCase();
+                    if (currentSrc.endsWith('.png')) {
+                        slicerImg.src = photoSrc.replace('.png', '.jpg');
+                    } else if (currentSrc.endsWith('.jpg')) {
+                        slicerImg.src = photoSrc.replace('.jpg', '.webp');
+                    } else {
+                        slicerImg.src = data.photo || 'images/jabonera.png';
+                        slicerImg.onerror = null;
+                    }
+                };
+            }
         }
 
         
@@ -3198,10 +3359,66 @@ document.addEventListener('DOMContentLoaded', () => {
     compressedImageBase64 = '';
 
     function processImageFile(file) {
-        if (!file || !file.type.startsWith('image/')) return;
+        if (!file) return;
+
+        let mime = file.type || '';
+        const ext = file.name ? file.name.substring(file.name.lastIndexOf('.')).toLowerCase() : '';
+        if (!mime && ext) {
+            if (['.jpg', '.jpeg', '.jpe'].includes(ext)) mime = 'image/jpeg';
+            else if (ext === '.png') mime = 'image/png';
+            else if (ext === '.gif') mime = 'image/gif';
+            else if (ext === '.webp') mime = 'image/webp';
+            else if (ext === '.svg') mime = 'image/svg+xml';
+            else if (ext === '.mp4') mime = 'video/mp4';
+            else if (ext === '.webm') mime = 'video/webm';
+            else if (ext === '.ogv') mime = 'video/ogg';
+            else if (ext === '.mov') mime = 'video/quicktime';
+        }
+
+        console.log("📂 [DEBUG] Procesando archivo:", file.name, "MIME:", mime, "Tamaño:", file.size);
+
+        if (!mime.startsWith('image/') && !mime.startsWith('video/')) {
+            alert("⚠️ Formato de archivo no soportado. Por favor suba una imagen (JPG, PNG, GIF, WEBP) o video (MP4, WEBM).");
+            return;
+        }
 
         const reader = new FileReader();
         reader.onload = function(event) {
+            const isVideoOrGif = mime.startsWith('video/') || mime === 'image/gif';
+            if (isVideoOrGif) {
+                let base64Data = event.target.result;
+                if (base64Data.startsWith('data:application/octet-stream;')) {
+                    base64Data = base64Data.replace('data:application/octet-stream;', `data:${mime};`);
+                }
+                
+                if (!serverAvailable && base64Data.length > 2000000) {
+                    alert("⚠️ El archivo multimedia supera los 2MB de límite en almacenamiento local (sin servidor). Suba un archivo más optimizado o inicie el servidor.");
+                    return;
+                }
+                compressedImageBase64 = base64Data;
+                
+                const uploadPreviewContainer = document.getElementById('uploadPreviewContainer');
+                const uploadPreviewImg = document.getElementById('uploadPreviewImg');
+                const uploadPreviewVideo = document.getElementById('uploadPreviewVideo');
+                if (uploadPreviewContainer) {
+                    if (mime.startsWith('video/')) {
+                        if (uploadPreviewImg) uploadPreviewImg.style.display = 'none';
+                        if (uploadPreviewVideo) {
+                            uploadPreviewVideo.src = compressedImageBase64;
+                            uploadPreviewVideo.style.display = 'block';
+                        }
+                    } else {
+                        if (uploadPreviewVideo) uploadPreviewVideo.style.display = 'none';
+                        if (uploadPreviewImg) {
+                            uploadPreviewImg.src = compressedImageBase64;
+                            uploadPreviewImg.style.display = 'block';
+                        }
+                    }
+                    uploadPreviewContainer.style.display = 'flex';
+                }
+                return;
+            }
+
             const img = new Image();
             img.onload = function() {
                 // Configurar canvas para redimensionar y comprimir la captura de pantalla
@@ -3234,8 +3451,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Mostrar previsualización
                 const uploadPreviewContainer = document.getElementById('uploadPreviewContainer');
                 const uploadPreviewImg = document.getElementById('uploadPreviewImg');
-                if (uploadPreviewContainer && uploadPreviewImg) {
-                    uploadPreviewImg.src = compressedImageBase64;
+                const uploadPreviewVideo = document.getElementById('uploadPreviewVideo');
+                if (uploadPreviewContainer) {
+                    if (uploadPreviewVideo) uploadPreviewVideo.style.display = 'none';
+                    if (uploadPreviewImg) {
+                        uploadPreviewImg.src = compressedImageBase64;
+                        uploadPreviewImg.style.display = 'block';
+                    }
                     uploadPreviewContainer.style.display = 'flex';
                 }
             };
@@ -3265,7 +3487,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const items = (e.clipboardData || e.originalEvent.clipboardData).items;
                 for (let index in items) {
                     const item = items[index];
-                    if (item.kind === 'file' && item.type.startsWith('image/')) {
+                    if (item.kind === 'file' && (item.type.startsWith('image/') || item.type.startsWith('video/'))) {
                         const blob = item.getAsFile();
                         processImageFile(blob);
                         break;
@@ -3315,112 +3537,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (isAdmin) {
-        // Seleccionar todas las imágenes del catálogo
+        // Seleccionar todas las imágenes/videos del catálogo
         const catalogThumbs = document.querySelectorAll('.catalog-thumb');
-        catalogThumbs.forEach(img => {
-            img.style.cursor = 'pointer';
-            img.title = '🔓 Modo Admin: Hacé clic para cambiar la imagen del producto';
-            
-            // Efecto visual hover premium
-            img.addEventListener('mouseenter', () => {
-                img.style.filter = 'brightness(0.7) contrast(1.1)';
-                img.style.transform = 'scale(1.03)';
-                img.style.boxShadow = '0 0 15px var(--primary-glow)';
-            });
-            img.addEventListener('mouseleave', () => {
-                img.style.filter = '';
-                img.style.transform = '';
-                img.style.boxShadow = '';
-            });
-
-            img.addEventListener('click', () => {
-                const key = getProductKeyFromImgId(img.id);
-                if (!key) return;
-
-                const fileInput = document.createElement('input');
-                fileInput.type = 'file';
-                fileInput.accept = 'image/*';
-                
-                fileInput.addEventListener('change', (e) => {
-                    const file = e.target.files[0];
-                    if (file) {
-                        const reader = new FileReader();
-                        reader.onload = function(event) {
-                            const tempImg = new Image();
-                            tempImg.onload = function() {
-                                // Redimensionar y comprimir usando canvas
-                                const canvas = document.createElement('canvas');
-                                const maxDim = 320; // Tamaño óptimo para evitar bloqueos
-                                let width = tempImg.width;
-                                let height = tempImg.height;
-
-                                if (width > height) {
-                                    if (width > maxDim) {
-                                        height = Math.round((height * maxDim) / width);
-                                        width = maxDim;
-                                    }
-                                } else {
-                                    if (height > maxDim) {
-                                        width = Math.round((width * maxDim) / height);
-                                        height = maxDim;
-                                    }
-                                }
-
-                                canvas.width = width;
-                                canvas.height = height;
-                                const ctx = canvas.getContext('2d');
-                                ctx.drawImage(tempImg, 0, 0, width, height);
-
-                                const compressedBase64 = canvas.toDataURL('image/jpeg', 0.5);
-
-                                // Aplicar en tiempo real a la interfaz
-                                img.src = compressedBase64;
-
-                                if (serverAvailable) {
-                                    // Subir la imagen al servidor y obtener la URL real en disco
-                                    uploadImageToServer(key, compressedBase64).then(uploadedUrl => {
-                                        const finalUrl = uploadedUrl || compressedBase64;
-                                        
-                                        if (key.startsWith('custom_')) {
-                                            const customProds = getSafeCustomProducts();
-                                            const prodIndex = customProds.findIndex(p => p.key === key);
-                                            if (prodIndex !== -1) {
-                                                customProds[prodIndex].photo = finalUrl;
-                                                customProds[prodIndex].slicerPhoto = finalUrl;
-                                                localStorage.setItem('custom_products', JSON.stringify(customProds));
-                                            }
-                                        } else {
-                                            localStorage.setItem(`custom_image_${key}`, finalUrl);
-                                        }
-                                        
-                                        // Persistir los JSONs a disco de forma síncrona
-                                        persistDataToServer(true);
-                                        alert("✨ ¡Imagen del producto actualizada y persistida con éxito en el catálogo!");
-                                    });
-                                } else {
-                                    // Fallback tradicional si no hay servidor
-                                    if (key.startsWith('custom_')) {
-                                        const customProds = getSafeCustomProducts();
-                                        const prodIndex = customProds.findIndex(p => p.key === key);
-                                        if (prodIndex !== -1) {
-                                            customProds[prodIndex].photo = compressedBase64;
-                                            customProds[prodIndex].slicerPhoto = compressedBase64;
-                                            localStorage.setItem('custom_products', JSON.stringify(customProds));
-                                        }
-                                    } else {
-                                        localStorage.setItem(`custom_image_${key}`, compressedBase64);
-                                    }
-                                    alert("✨ ¡Imagen del producto actualizada y persistida con éxito en el catálogo!");
-                                }
-                            };
-                            tempImg.src = event.target.result;
-                        };
-                        reader.readAsDataURL(file);
-                    }
-                });
-                
-                fileInput.click();
-            });
+        catalogThumbs.forEach(thumb => {
+            const key = getProductKeyFromImgId(thumb.id);
+            if (key) {
+                setupAdminMediaListeners(thumb, key);
+            }
         });
     }
 
