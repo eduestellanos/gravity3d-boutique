@@ -1498,14 +1498,23 @@ document.addEventListener('DOMContentLoaded', () => {
         if (calcEnergyCost) calcEnergyCost.textContent = formatARS(rawEnergyCost);
         if (calcAmortCost) calcAmortCost.textContent = formatARS(rawAmortCost);
         if (calcNetCost) calcNetCost.textContent = formatARS(netCost);
-        if (calcPriceSuggested) calcPriceSuggested.textContent = formatARSNoDec(suggestedPrice);
+        
+        const manualInput = document.getElementById('newProdPriceManual');
+        const manualPrice = manualInput ? parseFloat(manualInput.value) : NaN;
+        if (calcPriceSuggested) {
+            if (!isNaN(manualPrice) && manualPrice > 0) {
+                calcPriceSuggested.textContent = formatARSNoDec(manualPrice) + " (Manual)";
+            } else {
+                calcPriceSuggested.textContent = formatARSNoDec(suggestedPrice);
+            }
+        }
         
         return {
             filamentCost: rawFilamentCost,
             energyCost: rawEnergyCost,
             amortCost: rawAmortCost,
             netCost: netCost,
-            suggestedPrice: suggestedPrice
+            suggestedPrice: !isNaN(manualPrice) && manualPrice > 0 ? manualPrice : suggestedPrice
         };
     }
 
@@ -1639,6 +1648,13 @@ document.addEventListener('DOMContentLoaded', () => {
             newProdMinutes.addEventListener(evt, updateLiveTelemetry);
             newProdMargin.addEventListener(evt, updateLiveTelemetry);
         });
+        
+        const newProdPriceManual = document.getElementById('newProdPriceManual');
+        if (newProdPriceManual) {
+            ['input', 'change'].forEach(evt => {
+                newProdPriceManual.addEventListener(evt, updateLiveTelemetry);
+            });
+        }
         
         if (newProdMaterial) {
             newProdMaterial.addEventListener('change', () => {
@@ -2217,6 +2233,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (newProdHours) newProdHours.value = product.telemetry.hours;
             if (newProdMinutes) newProdMinutes.value = product.telemetry.minutes;
             if (newProdMargin) newProdMargin.value = product.telemetry.margin || "1.65";
+            const newProdPriceManual = document.getElementById('newProdPriceManual');
+            if (newProdPriceManual) {
+                newProdPriceManual.value = product.telemetry.manualPrice || '';
+            }
         }
         
         // Recalcular costos de inmediato
@@ -2332,10 +2352,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const material = newProdMaterial.value;
-        const weight = parseFloat(newProdWeight.value);
-        if (isNaN(weight) || weight <= 0) {
-            alert("⚠️ Por favor, ingrese un peso válido en la telemetría.");
-            return;
+        const manualInput = document.getElementById('newProdPriceManual');
+        const manualPrice = manualInput ? parseFloat(manualInput.value) : NaN;
+        
+        let weight = parseFloat(newProdWeight.value);
+        if (isNaN(weight) || weight < 0) {
+            weight = 0;
+        }
+
+        if (isNaN(manualPrice) || manualPrice <= 0) {
+            if (weight <= 0) {
+                alert("⚠️ Por favor, ingrese un peso válido para calcular el precio, o defina un precio de venta fijo manual.");
+                return;
+            }
         }
 
         const uniqueKey = editingProductKey || `custom_${Date.now()}`;
@@ -2392,15 +2421,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const newProdColor = document.getElementById('newProdColor');
         const typedColor = newProdColor ? newProdColor.value.trim() : '';
         const defaultColor = typedColor || (material === 'PETG' ? 'Space Grey' : 'Beige');
-        const friendlyColor = defaultColor;
+        const friendlyColor = defaultColor || 'N/A';
         
         const calcData = updateLiveTelemetry();
+        const finalPrice = (!isNaN(manualPrice) && manualPrice > 0) ? manualPrice : (calcData ? calcData.suggestedPrice : 0);
         
         const newProduct = {
             key: uniqueKey,
             name: newProdName.value,
             desc: newProdDesc.value,
-            price: calcData.suggestedPrice,
+            price: finalPrice,
             collectionId: collectionId,
             collectionName: collectionName,
             categoryBadge: `Tecnología ${material}`,
@@ -2411,13 +2441,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 hours: parseInt(newProdHours.value) || 0,
                 minutes: parseInt(newProdMinutes.value) || 0,
                 material: material,
-                color: defaultColor,
+                color: defaultColor || 'N/A',
                 friendlyColor: friendlyColor,
-                margin: parseFloat(newProdMargin.value),
-                filamentCost: calcData.filamentCost,
-                energyCost: calcData.energyCost,
-                amortCost: calcData.amortCost,
-                netCost: calcData.netCost
+                margin: parseFloat(newProdMargin.value) || 1.65,
+                filamentCost: calcData ? calcData.filamentCost : 0,
+                energyCost: calcData ? calcData.energyCost : 0,
+                amortCost: calcData ? calcData.amortCost : 0,
+                netCost: calcData ? calcData.netCost : 0,
+                manualPrice: !isNaN(manualPrice) && manualPrice > 0 ? manualPrice : null
             }
         };
         
@@ -3220,10 +3251,10 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('telemetryNetCost').textContent = formatARSPrecise(netCost);
         document.getElementById('telemetrySuggestedPrice').textContent = formatARS(activePriceRounded);
         
-        const currentMargin = activePriceRounded / netCost;
+        const currentMargin = netCost > 0 ? activePriceRounded / netCost : 0;
         document.getElementById('telemetryMarginIntel').innerHTML = `
             *Cálculo de Taller: Costo Extrusión (con purga) + Energía Activa + Desgaste Mecánico P1S.<br>
-            <strong>Márgen Comercial Real en Góndola: ${currentMargin.toFixed(2)}x</strong> (Redondeado).
+            <strong>Márgen Comercial Real en Góndola: ${currentMargin > 0 ? currentMargin.toFixed(2) + 'x' : 'N/A (Precio Fijo)'}</strong> (Redondeado).
         `;
         
         // Mostrar modal con efecto fade-in

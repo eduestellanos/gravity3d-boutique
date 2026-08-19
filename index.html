@@ -253,7 +253,7 @@
                                 <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 16px;">
                                     <div class="form-group">
                                         <label class="control-label-micro" style="margin-bottom: 8px; display: block;">Consumo Filamento (g):</label>
-                                        <input type="number" id="newProdWeight" required step="0.01" min="0.1" placeholder="Ej: 38.83" style="width: 100%; padding: 10px 14px; border-radius: 10px; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); color: white; font-family: var(--font-body); font-size: 0.9rem; outline: none; transition: var(--transition);">
+                                        <input type="number" id="newProdWeight" step="0.01" min="0" placeholder="Ej: 38.83" style="width: 100%; padding: 10px 14px; border-radius: 10px; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); color: white; font-family: var(--font-body); font-size: 0.9rem; outline: none; transition: var(--transition);">
                                     </div>
                                     
                                     <div class="form-group">
@@ -273,29 +273,36 @@
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label-micro" style="margin-bottom: 8px; display: block;">Color del Filamento (Base):</label>
-                                        <input type="text" id="newProdColor" placeholder="Ej: Rojo, Verde Oliva, Azul" required style="width: 100%; padding: 10px 14px; border-radius: 10px; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); color: white; font-family: var(--font-body); font-size: 0.9rem; outline: none; transition: var(--transition);">
+                                        <input type="text" id="newProdColor" placeholder="Ej: Rojo, Verde Oliva, Azul" style="width: 100%; padding: 10px 14px; border-radius: 10px; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); color: white; font-family: var(--font-body); font-size: 0.9rem; outline: none; transition: var(--transition);">
                                     </div>
                                 </div>
                                 
                                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
                                     <div class="form-group">
                                         <label class="control-label-micro" style="margin-bottom: 8px; display: block;">Horas de Impresión:</label>
-                                        <input type="number" id="newProdHours" required min="0" placeholder="Ej: 2" style="width: 100%; padding: 10px 14px; border-radius: 10px; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); color: white; font-family: var(--font-body); font-size: 0.9rem; outline: none; transition: var(--transition);">
+                                        <input type="number" id="newProdHours" min="0" placeholder="Ej: 2" style="width: 100%; padding: 10px 14px; border-radius: 10px; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); color: white; font-family: var(--font-body); font-size: 0.9rem; outline: none; transition: var(--transition);">
                                     </div>
                                     
                                     <div class="form-group">
                                         <label class="control-label-micro" style="margin-bottom: 8px; display: block;">Minutos de Impresión:</label>
-                                        <input type="number" id="newProdMinutes" required min="0" max="59" placeholder="Ej: 2" style="width: 100%; padding: 10px 14px; border-radius: 10px; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); color: white; font-family: var(--font-body); font-size: 0.9rem; outline: none; transition: var(--transition);">
+                                        <input type="number" id="newProdMinutes" min="0" max="59" placeholder="Ej: 2" style="width: 100%; padding: 10px 14px; border-radius: 10px; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); color: white; font-family: var(--font-body); font-size: 0.9rem; outline: none; transition: var(--transition);">
                                     </div>
                                 </div>
                                 
-                                <div class="form-group">
-                                    <label class="control-label-micro" style="margin-bottom: 8px; display: block;">Margen Comercial (Precio de Venta):</label>
-                                    <select id="newProdMargin" required style="width: 100%; padding: 10px 14px; border-radius: 10px; background: #0B0F19; border: 1px solid var(--glass-border); color: white; font-family: var(--font-body); font-size: 0.9rem; outline: none; transition: var(--transition); cursor: pointer;">
-                                        <option value="1.60">Margen Conservador (1.60x)</option>
-                                        <option value="1.65" selected>Margen Premium Estándar (1.65x)</option>
-                                        <option value="2.00">Margen de Lujo Absoluto (2.00x)</option>
-                                    </select>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                                    <div class="form-group">
+                                        <label class="control-label-micro" style="margin-bottom: 8px; display: block;">Margen Comercial:</label>
+                                        <select id="newProdMargin" required style="width: 100%; padding: 10px 14px; border-radius: 10px; background: #0B0F19; border: 1px solid var(--glass-border); color: white; font-family: var(--font-body); font-size: 0.9rem; outline: none; transition: var(--transition); cursor: pointer;">
+                                            <option value="1.60">Conservador (1.60x)</option>
+                                            <option value="1.65" selected>Estándar (1.65x)</option>
+                                            <option value="2.00">De Lujo (2.00x)</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="control-label-micro" style="margin-bottom: 8px; display: block; color: #48BB78;">Precio Fijo Manual (Opcional):</label>
+                                        <input type="number" id="newProdPriceManual" min="0" placeholder="Ej: 5500 (Ignora telemetría)" style="width: 100%; padding: 10px 14px; border-radius: 10px; background: rgba(72,187,120,0.05); border: 1px solid rgba(72,187,120,0.2); color: white; font-family: var(--font-body); font-size: 0.9rem; outline: none; transition: var(--transition);">
+                                    </div>
                                 </div>
                                 
                                 <!-- Live Calculation Summary Dashboard -->
