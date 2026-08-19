@@ -2346,10 +2346,6 @@ document.addEventListener('DOMContentLoaded', () => {
             alert("⚠️ Por favor, ingrese el nombre del producto.");
             return;
         }
-        if (!newProdDesc || !newProdDesc.value.trim()) {
-            alert("⚠️ Por favor, ingrese la descripción comercial.");
-            return;
-        }
 
         const material = newProdMaterial.value;
         const manualInput = document.getElementById('newProdPriceManual');
@@ -2358,13 +2354,6 @@ document.addEventListener('DOMContentLoaded', () => {
         let weight = parseFloat(newProdWeight.value);
         if (isNaN(weight) || weight < 0) {
             weight = 0;
-        }
-
-        if (isNaN(manualPrice) || manualPrice <= 0) {
-            if (weight <= 0) {
-                alert("⚠️ Por favor, ingrese un peso válido para calcular el precio, o defina un precio de venta fijo manual.");
-                return;
-            }
         }
 
         const uniqueKey = editingProductKey || `custom_${Date.now()}`;
